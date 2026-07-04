@@ -11,14 +11,14 @@ dependencies = [
     # BayesFlow 2.x itself requires numpy>=2.2.6 and pandas>=2.3.3. We keep pandas <3 to avoid the
     # breaking pandas-3 major on Colab; bayesflow needs nothing newer than 2.3.x.
     "numpy>=2.2.6",
-    "pandas>=2.3.3,<3",
+    "pandas<3",
     "pyro-ppl>=1.9.1",
     "scikit-learn>=1.5",
     "scipy>=1.13",
     # Not used by the tutorial, but pulling in a recent numba makes Colab upgrade its pre-installed
     # numba 0.60 (which caps numpy<2.1) to one compatible with the numpy BayesFlow needs — this
     # silences the "numba requires numpy<2.1" pip conflict warning on Colab.
-    "numba>=0.61",
+    "numba==0.65.1",
 ]
 
 [build-system]
