@@ -1,14 +1,32 @@
 [project]
 name = "bayesflowtutorial"
 version = "0.1.0"
-requires-python = ">=3.14"
+requires-python = ">=3.11"
 dependencies = [
     "bayesflow>=2.0.12",
     "ipywidgets>=8.1.8",
     "jax>=0.10.2",
     "keras>=3.15.0",
     "matplotlib>=3.11.0",
-    "numpy>=2.5.0",
-    "pandas>=3.0.3",
+    # BayesFlow 2.x itself requires numpy>=2.2.6 and pandas>=2.3.3. We keep pandas <3 to avoid the
+    # breaking pandas-3 major on Colab; bayesflow needs nothing newer than 2.3.x.
+    "numpy>=2.2.6",
+    "pandas>=2.3.3,<3",
     "pyro-ppl>=1.9.1",
+    "scikit-learn>=1.5",
+    "scipy>=1.13",
+    # Not used by the tutorial, but pulling in a recent numba makes Colab upgrade its pre-installed
+    # numba 0.60 (which caps numpy<2.1) to one compatible with the numpy BayesFlow needs — this
+    # silences the "numba requires numpy<2.1" pip conflict warning on Colab.
+    "numba>=0.61",
 ]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+# This project ships notebooks + a `misc/` helper folder, not an importable package.
+# Installing it (e.g. `pip install git+...`) only needs to pull in the dependencies above,
+# so we build a metadata-only wheel with no Python modules.
+py-modules = []

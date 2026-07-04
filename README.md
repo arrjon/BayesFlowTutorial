@@ -26,14 +26,23 @@ Work through them in order — each assumes the concepts from the previous one.
 ## Running on Google Colab
 
 Open a notebook via its "Open in Colab" badge (top of each notebook), then run the first
-setup cell. 
+setup cell. That cell installs this project and **all** its dependencies (BayesFlow, JAX,
+Pyro, scikit-learn, …) straight from GitHub via
+`pip install "git+https://github.com/arrjon/BayesFlowTutorial.git"` — the dependency list
+lives in [`pyproject.toml`](pyproject.toml), so there is a single source of truth. Every
+notebook is self-contained (notebook 3 defines its robot-arm plotting helper inline).
+
+You may see **one** red pip *dependency-conflict* warning on Colab — `google-colab` pins
+`pandas==2.2.2`, while BayesFlow 2.x requires `pandas>=2.3.3`. This one is unavoidable (and
+harmless: the tutorial doesn't use `google-colab`'s pandas features). The older
+`numba`/`numpy` conflict is resolved by `pyproject.toml` pulling in a newer `numba`.
 
 ## Running locally
 
 ```bash
-uv sync          # or: pip install "bayesflow>=2.0.12" jax
-# notebook 1 also needs: pyro-ppl (+ torch)
-# notebook 3 also needs: scikit-learn scipy
+uv sync                      # installs everything from pyproject.toml
+# or, without uv:
+pip install "git+https://github.com/arrjon/BayesFlowTutorial.git"
 ```
 
 BayesFlow runs on JAX, PyTorch or TensorFlow; the notebooks default to JAX.
