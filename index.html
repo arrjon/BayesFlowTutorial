@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="presentation_files/libs/clipboard/clipboard.min.js"></script>
+<script src="presentation_files/libs/quarto-html/tabby.min.js"></script>
+<script src="presentation_files/libs/quarto-html/popper.min.js"></script>
+<script src="presentation_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="presentation_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="presentation_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="presentation_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.37">
+
+  <meta name="author" content="Jonas Arruda University of Bonn">
+  <meta name="dcterms.date" content="2026-08-06">
+  <title>Simulation-Based Inference with Generative Neural Networks</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="presentation_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="presentation_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="presentation_files/libs/revealjs/dist/theme/quarto-62803eae62b78208554a5134fec59b11.css">
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+  <link href="presentation_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="presentation_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="presentation_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="presentation_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Simulation-Based Inference with Generative Neural Networks</h1>
+  <p class="subtitle">ProbAI School 2026</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Jonas Arruda<br>University of Bonn 
+</div>
+</div>
+</div>
+
+  <p class="date">2026-08-06</p>
+</section>
+<section id="overview" class="slide level2">
+<h2>Overview</h2>
+<p><strong>Plan:</strong> Lecture mixed with exercises.</p>
+<div class="fragment">
+<ol type="1">
+<li><p><strong>What is SBI?</strong> Introduction, Bayesian model types, normalizing flows.</p>
+<p>→ <em>Exercise 1: from MCMC to amortized inference.</em></p></li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="2" type="1">
+<li><p><strong>Does it work?</strong> Calibration checking and model misspecification.</p>
+<p>→ <em>Exercise 2: diagnostics on an epidemic time-series model.</em></p></li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="3" type="1">
+<li><p><strong>Modern generative models:</strong> diffusion models, flow matching, consistency models.</p>
+<p>→ <em>Exercise 3: diffusion models with post-hoc guidance.</em></p></li>
+</ol>
+</div>
+</section>
+<section>
+<section id="part-1-what-is-simulation-based-inference" class="title-slide slide level1 special center" data-background-color="#004e9f">
+<h1>Part 1: What is Simulation-Based Inference?</h1>
+
+</section>
+<section id="learning-densities" class="slide level2">
+<h2>Learning Densities</h2>
+<video src="media/videos/manim_diffusion/1080p60/ReverseODE.mp4" data-autoplay="" autoplay="" loop="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
+</video>
+<p>Everything today does one thing: transport a Gaussian onto our target, here a checkerboard.</p>
+</section>
+<section id="everything-starts-with-a-simulator" class="slide level2">
+<h2>Everything Starts with a Simulator</h2>
+<p>We start from two objects we can sample: a <strong>prior</strong> and a scientific <strong>simulator</strong>. Together they define the <em>forward process</em> from unknown parameters <span class="math inline">\boldsymbol{\theta}</span> to observables <span class="math inline">\mathbf{y}</span>:</p>
+<p><span class="math display">
+\boldsymbol{\theta} \sim p(\boldsymbol{\theta}), \qquad
+\mathbf{y} = \operatorname{Sim}(\boldsymbol{\theta}, \mathbf{u}),\quad \mathbf{u}\sim\text{RNG}(\cdot)
+</span></p>
+
+<img data-src="material/stefan_forward-process.png" alt="SBI forward process: prior to observables" class="r-stretch"><p>Parameters and data are drawn from the joint <span class="math inline">\boldsymbol{\theta}, \mathbf{y} \sim p(\boldsymbol{\theta}, \mathbf{y})</span>, and that joint is our <strong>Bayesian model</strong>.</p>
+<p><em>Figure: S. Radev, BayesFlow.</em></p>
+</section>
+<section id="forward-and-inverse" class="slide level2">
+<h2>Forward and Inverse</h2>
+<p>Running the simulator forward can be slow, but it is usually possible. What we actually want is the <strong>inverse process</strong>, the posterior <span class="math inline">p(\boldsymbol{\theta} \mid \mathbf{y}_{\text{obs}})</span>:</p>
+
+<img data-src="material/stefan_inverse-process.png" alt="SBI forward and inverse process" class="r-stretch"><div class="fragment">
+<div class="columns">
+<div class="column" style="width:49%;">
+<p><strong>Likelihood-based (explicit)</strong></p>
+<ul>
+<li><span class="math inline">p(\boldsymbol{\theta})</span>: sample and evaluate.</li>
+<li><span class="math inline">p(\mathbf{y}\mid\boldsymbol{\theta})</span>: sample and evaluate.</li>
+</ul>
+<p>→ MCMC, VI (Day 1 &amp; 2).</p>
+</div><div class="column" style="width:49%;">
+<p><strong>Simulation-based (implicit)</strong></p>
+<ul>
+<li><span class="math inline">p(\boldsymbol{\theta})</span>: sample, evaluation <em>optional</em>.</li>
+<li><span class="math inline">p(\mathbf{y}\mid\boldsymbol{\theta})</span>: <strong>sample only</strong>, since the likelihood may be intractable.</li>
+</ul>
+</div></div>
+</div>
+</section>
+<section id="a-simple-toy-example" class="slide level2">
+<h2>A Simple Toy Example</h2>
+<p>3-segment planar robot arm <span class="citation" data-cites="kruse2021benchmarking">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Kruse et al., 2021</a>)</span></p>
+<div class="columns">
+<div class="column" style="width:45%;">
+<ul>
+<li><strong>Parameters</strong> (not observed): <span class="math display">\boldsymbol{\theta}=(h,\alpha_1,\alpha_2,\alpha_3)</span></li>
+<li><strong>Observation:</strong> end position <span class="math inline">\mathbf{y} = M(\boldsymbol{\theta})</span>.</li>
+<li><strong>Task:</strong> recover <span class="math inline">p(\boldsymbol{\theta}\mid \mathbf{y})</span>.</li>
+<li><strong>Challenge:</strong> different angles give the same <span class="math inline">\mathbf{y}</span>, so the posterior is <strong>multimodal</strong>.</li>
+</ul>
+</div><div class="column" style="width:55%;">
+<p><img data-src="material/simple%20example.png" alt="Simple Example"></p>
+</div></div>
+<p>We will return to this example in Part 3.</p>
+</section>
+<section id="amortized-neural-posterior-estimation" class="slide level2">
+<h2>Amortized Neural Posterior Estimation</h2>
+<p>Train a conditional density estimator <span class="math inline">q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})</span> on simulations <span class="math inline">(\boldsymbol{\theta}, \mathbf{y})</span> using</p>
+<p><span class="math display">
+\mathbb{E}_{p(\mathbf{y})}\big[\operatorname{KL}\!\big(p(\boldsymbol{\theta}\mid\mathbf{y})\,\Vert\, q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})\big)\big]
+</span></p>
+<p>This is the <strong>forward KL</strong> to the true posterior, averaged over the marginal data distribution. The unique minimizer is the true posterior <span class="math inline">q_{\boldsymbol{\phi}} = p(\boldsymbol{\theta}\mid\mathbf{y})</span>.</p>
+<div class="fragment">
+<p><span class="math display">
+\begin{align*}
+\mathbb{E}_{p(\mathbf{y})}\!\left[
+        \operatorname{KL}(p(\boldsymbol{\theta} \mid \mathbf{y}) \Vert q_{\phi}(\boldsymbol{\theta} \mid \mathbf{y}))
+       \right] \notag
+    &amp;=\mathbb{E}_{p(\mathbf{y})}\mathbb{E}_{p(\boldsymbol{\theta} \mid \mathbf{y})}\!\left[
+        \log p(\boldsymbol{\theta} \mid \mathbf{y}) - \log q_{\phi}(\boldsymbol{\theta} \mid \mathbf{y})
+       \right] \notag \\
+    &amp;=\mathbb{E}_{(\boldsymbol{\theta},\mathbf{y})}\!\left[
+        \log p(\boldsymbol{\theta} \mid \mathbf{y}) - \log q_{\phi}(\boldsymbol{\theta} \mid \mathbf{y})
+       \right] \notag \\
+    &amp;=\mathbb{E}_{(\boldsymbol{\theta},\mathbf{y})}\!\left[
+        \log p(\boldsymbol{\theta} \mid \mathbf{y})\right]
+       -\mathbb{E}_{(\boldsymbol{\theta},\mathbf{y})}\!\left[
+        \log q_{\phi}(\boldsymbol{\theta} \mid \mathbf{y})
+       \right].
+\end{align*}
+</span></p>
+</div>
+<div class="fragment">
+<p>Optimizing allows us to drop the true posterior as it does not depend on <span class="math inline">\boldsymbol{\phi}</span>: <span class="math display">
+\boldsymbol{\phi}^* = \arg\min_{\boldsymbol{\phi}}\;
+\mathbb{E}_{(\boldsymbol{\theta},\mathbf{y})\sim p(\boldsymbol{\theta},\mathbf{y})}\big[-\log q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})\big]
+</span></p>
+</div>
+<div class="fragment">
+<p><strong>Amortization:</strong> pay the training cost once; inference on a new <span class="math inline">\mathbf{y}_{\text{obs}}</span> is then a single evaluation of <span class="math inline">q_{\boldsymbol{\phi}}</span>.</p>
+</div>
+</section>
+<section id="the-density-estimator-normalizing-flows" class="slide level2">
+<h2>The Density Estimator: Normalizing Flows</h2>
+<p>How do we represent a flexible <span class="math inline">q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})</span> that we can both <strong>sample</strong> and <strong>evaluate</strong>?</p>
+<p>With a neural network, but an invertible one!</p>
+<div class="fragment">
+<p>A <strong>normalizing flow</strong> transports a simple base <span class="math inline">p(\mathbf{z})=\mathcal{N}(\mathbf{0},\mathbf{I})</span> through a learned bijection <span class="math inline">f_{\boldsymbol{\phi}}(\cdot;\mathbf{y})</span> <span class="citation" data-cites="rezende2015variational papamakarios2021normalizing">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Papamakarios et al., 2021</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Rezende and Mohamed, 2015</a>)</span>: <span class="math display">
+\boldsymbol{\theta} = f_{\boldsymbol{\phi}}^{-1}(\mathbf{z};\mathbf{y}),\qquad \mathbf{z}\sim\mathcal{N}(\mathbf{0},\mathbf{I})
+</span></p>
+</div>
+<div class="fragment">
+<p><strong>Change of variables</strong> gives a tractable density: <span class="math display">
+q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})
+= p\big(f_{\boldsymbol{\phi}}(\boldsymbol{\theta};\mathbf{y})\big)\,
+\big|\det J_{f_{\boldsymbol{\phi}}}(\boldsymbol{\theta};\mathbf{y})\big|
+</span></p>
+<ul>
+<li>Plug into the NPE loss → maximize the exact log-likelihood of the flow.</li>
+<li>The price: the network must be <strong>invertible</strong>, and we must be able to compute <span class="math inline">\det J</span>.</li>
+</ul>
+</div>
+</section>
+<section id="making-flows-cheap-coupling-layers" class="slide level2">
+<h2>Making Flows Cheap: Coupling Layers</h2>
+<p>That computational costs sits in the log-determinant: <span class="math inline">\mathcal{O}(d^3)</span> in general, but only <span class="math inline">\mathcal{O}(d)</span> if the Jacobian is <strong>triangular</strong>.</p>
+<div class="fragment">
+<p><strong>Coupling flow</strong> <span class="citation" data-cites="dinh2017density">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Dinh et al., 2017</a>)</span>: split <span class="math inline">\boldsymbol{\theta}=(\boldsymbol{\theta}^A,\boldsymbol{\theta}^B)</span>, transform one block conditioned on the other: <span class="math display">
+\mathbf{z}^A = f(\boldsymbol{\theta}, \mathbf{y}) = \boldsymbol{\theta}^A \odot \exp\!\big(s(\boldsymbol{\theta}^B,\mathbf{y})\big) + t(\boldsymbol{\theta}^B,\mathbf{y}),
+\qquad \mathbf{z}^B = \boldsymbol{\theta}^B
+</span></p>
+</div>
+<div class="fragment">
+<p>Then the inverse follows as: <span class="math display">
+    \boldsymbol{\theta}^A
+    =
+    \left(\mathbf{z}^A-t(\mathbf{z}^B,\mathbf{y})\right)
+    \odot
+    \exp\!\left(-s(\mathbf{z}^B,\mathbf{y})\right),
+    \quad   \boldsymbol{\theta}^B=\mathbf{z}^B.
+</span></p>
+</div>
+<div class="fragment">
+<ul>
+<li><span class="math inline">s, t</span> are arbitrary neural nets (they need <strong>not</strong> be invertible).</li>
+<li>The log-determinant is <span class="math inline">\sum s(\cdot)</span>, and the inverse costs the same as the forward.</li>
+<li>Stack many layers <span class="math inline">f=f^1 \circ \cdots \circ f^L</span>, alternating which block is transformed.</li>
+<li><strong>Spline</strong> couplings <span class="citation" data-cites="durkan2019neural">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Durkan et al., 2019</a>)</span> add local flexibility compared to affine layers.</li>
+<li>Stacked coupling blocks are <strong>universal</strong> density approximators for sufficiently regular densities <span class="citation" data-cites="draxler2024universality">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Draxler et al., 2024</a>)</span>.</li>
+</ul>
+</div>
+</section>
+<section id="normalizing-flows-on-a-checkerboard" class="slide level2">
+<h2>Normalizing Flows on a Checkerboard</h2>
+<video src="media/videos/manim_diffusion/1080p60/NFLayers.mp4" data-autoplay="" autoplay="" loop="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
+</video>
+<p>Each coupling layer applies one invertible step; the composition carries the Gaussian onto the checkerboard.</p>
+</section>
+<section id="two-networks-summary-inference" class="slide level2">
+<h2>Two Networks: Summary + Inference</h2>
+<p>Raw data is rarely a fixed-size vector. A summary network compresses it first, and both networks are trained <strong>jointly</strong>, end to end:</p>
+<p><span class="math display">
+\boldsymbol{\theta}\sim q_{\boldsymbol{\phi}}\big(\boldsymbol{\theta}\mid \underbrace{s(\mathbf{y})}_{\text{summary}}\big)
+</span></p>
+<ul>
+<li><strong>Summary network</strong> <span class="math inline">s</span>: compresses raw data <span class="math inline">\mathbf{y}</span> (set, series, hierarchy) into a fixed-size vector, using the inductive bias that matches the data.</li>
+<li><strong>Inference network</strong> <span class="math inline">q_{\boldsymbol{\phi}}</span>: the conditional flow over parameters, taking <span class="math inline">s(\mathbf{y})</span> as its condition.</li>
+</ul>
+<div class="fragment">
+<p>Ideal case: <span class="math inline">s</span> is a <strong>sufficient statistic</strong> for <span class="math inline">\boldsymbol{\theta}</span>. In practice it is a <em>learned compression</em>, optimized for posterior inference <span class="citation" data-cites="radev2020bayesflow">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Radev et al., 2020</a>)</span>.</p>
+</div>
+<div class="fragment">
+<p>For plain vector data no summary network is needed: the flow conditions on <span class="math inline">\mathbf{y}</span> directly.</p>
+</div>
+</section>
+<section id="what-structure-does-the-data-have" class="slide level2">
+<h2>What Structure Does the Data Have?</h2>
+<p>The flow needs a <strong>fixed-size</strong> conditioning vector, and different data structures call for different summary networks:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Data type</th>
+<th>Symmetry</th>
+<th>Summary network</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Exchangeable set</td>
+<td>permutation invariance</td>
+<td>DeepSet / Set Transformer</td>
+</tr>
+<tr class="even">
+<td>Time series</td>
+<td>temporal order</td>
+<td>GRU / CNN / Transformer</td>
+</tr>
+<tr class="odd">
+<td>Hierarchical</td>
+<td>nested groups</td>
+<td>set-of-sets (composed)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="model-type-1-exchangeable-data" class="slide level2">
+<h2>Model Type 1: Exchangeable Data</h2>
+<p><span class="math inline">N</span> i.i.d. observations: the posterior does <strong>not</strong> depend on ordering.</p>
+<p><span class="math display">
+s(\mathbf{y}_{\pi(1)},\dots,\mathbf{y}_{\pi(N)}) = s(\mathbf{y}_1,\dots,\mathbf{y}_N)\quad\text{for all permutations }\pi
+</span></p>
+<div class="fragment">
+<p><strong>DeepSets</strong> <span class="citation" data-cites="zaheer2017deep">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Zaheer et al., 2017</a>)</span> enforce this by a <em>sum-decomposition</em>: <span class="math display">
+s(\mathbf{y}_1,\dots,\mathbf{y}_N) = \rho\Big(\textstyle\bigoplus_{i=1}^N \phi(\mathbf{y}_i)\Big)
+</span> embed each element with <span class="math inline">\phi</span>, pool with a symmetric aggregator (<span class="math inline">\sum</span>, mean, max), decode with <span class="math inline">\rho</span>.</p>
+</div>
+<div class="fragment">
+<p><strong>Set Transformer</strong> <span class="citation" data-cites="lee2019set">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Lee et al., 2019</a>)</span>: attention lets each element’s representation depend on the whole set, which is more flexible but more expensive. Both architectures handle <strong>variable <span class="math inline">N</span></strong>.</p>
+</div>
+</section>
+<section id="model-type-2-time-series" class="slide level2">
+<h2>Model Type 2: Time Series</h2>
+<p>Ordering now carries information, so the summary network needs a <strong>temporal</strong> inductive bias.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Convolutional</strong> summaries share local filters across time: <span class="math display">
+s_{t,k} = \sigma\Big(b_k + \sum_{l=-L}^{L}\sum_j w_{l,j,k}\,y_{t+l,j}\Big)
+</span> Short-range patterns, position-invariant.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>Recurrent (GRU/LSTM)</strong> summaries carry a hidden state: <span class="math display">
+\mathbf{h}_n = f_{\boldsymbol{\phi}}(\mathbf{y}_n, \mathbf{h}_{n-1})
+</span> Long-range dependence via gating.</p>
+</div></div>
+<div class="fragment">
+<p><strong>Transformers</strong> with time or positional embeddings also handle irregularly sampled series.</p>
+</div>
+</section>
+<section id="model-type-3-hierarchical-models" class="slide level2">
+<h2>Model Type 3: Hierarchical Models</h2>
+<p>Data comes in <strong>groups</strong> (subjects, experiments, sites): local variation, shared global structure <span class="citation" data-cites="gelman2013bayesian">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Gelman et al., 2013</a>)</span>.</p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<p><span class="math display">
+\boldsymbol{\eta}\sim p(\boldsymbol{\eta}),\quad
+\boldsymbol{\theta}^{(r)}\sim p(\boldsymbol{\theta}\mid\boldsymbol{\eta}),\quad
+\mathbf{y}^{(r)}\sim p(\mathbf{y}\mid\boldsymbol{\theta}^{(r)})
+</span></p>
+<p>Two coupled inference targets: <span class="math display">
+p(\boldsymbol{\eta}\mid\{\mathbf{y}^{(r)}\}_{r=1}^R),\qquad
+p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
+</span></p>
+<p><strong>Summary:</strong> a <em>set of sets</em>. Encode each group, then aggregate across groups with a permutation-invariant network.</p>
+</div><div class="column" style="width:45%;">
+<p><img data-src="material/bayesian-models-2-color%20small.png" alt="Hierarchical Bayesian model"></p>
+</div></div>
+<div class="fragment">
+<p><strong>Bottleneck:</strong> naive amortization needs many simulator calls <em>per group</em>, so the budget grows with <span class="math inline">R</span>. Part 3 comes back to this.</p>
+</div>
+</section>
+<section id="bayesflow-train-your-own-approximator" class="slide level2">
+<h2>BayesFlow: Train Your Own Approximator</h2>
+
+<img data-src="material/bf_landing_light.png" alt="BayesFlow landing" class="r-stretch"><p>An open-source library for the full amortized Bayesian workflow: <em><a href="https://bayesflow.org">bayesflow.org</a></em></p>
+</section>
+<section id="the-amortized-workflow" class="slide level2">
+<h2>The Amortized Workflow</h2>
+<div class="r-stack">
+<p><img data-src="material/workflow-1.png" alt="Workflow: simulator"></p>
+<p><img data-src="material/workflow-2.png" class="fragment" data-fragment-index="1" alt="Workflow: adapter"></p>
+<p><img data-src="material/workflow-3.png" class="fragment" data-fragment-index="2" alt="Workflow: networks"></p>
+<p><img data-src="material/workflow-4.png" class="fragment" data-fragment-index="3" alt="Workflow: full pipeline with diagnostics"></p>
+</div>
+<p>Build it up: <strong>simulate</strong> → <strong>adapt</strong> → train the <strong>neural approximator</strong> (summary + inference net) → <strong>diagnostics</strong>. <em>Figure: S. Radev, BayesFlow.</em></p>
+</section>
+<section id="code-a-basic-workflow" class="slide level2">
+<h2>Code: A Basic Workflow</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> bayesflow <span class="im">as</span> bf</span>
+<span id="cb1-2"><a href=""></a></span>
+<span id="cb1-3"><a href=""></a><span class="co"># 1. Simulator: draw (theta, y) pairs. The only thing you must provide.</span></span>
+<span id="cb1-4"><a href=""></a>simulator <span class="op">=</span> bf.make_simulator([prior, likelihood_simulator])</span>
+<span id="cb1-5"><a href=""></a></span>
+<span id="cb1-6"><a href=""></a><span class="co"># 2. Adapter: name/standardize/reshape variables for the networks</span></span>
+<span id="cb1-7"><a href=""></a>adapter <span class="op">=</span> (bf.Adapter()</span>
+<span id="cb1-8"><a href=""></a>           .standardize()</span>
+<span id="cb1-9"><a href=""></a>           .concatenate([<span class="st">"beta"</span>, <span class="st">"sigma"</span>], into<span class="op">=</span><span class="st">"inference_variables"</span>)</span>
+<span id="cb1-10"><a href=""></a>           .concatenate([<span class="st">"y"</span>],            into<span class="op">=</span><span class="st">"inference_conditions"</span>))</span>
+<span id="cb1-11"><a href=""></a></span>
+<span id="cb1-12"><a href=""></a><span class="co"># 3. Networks: inference (a normalizing flow) + optional summary net</span></span>
+<span id="cb1-13"><a href=""></a>workflow <span class="op">=</span> bf.BasicWorkflow(</span>
+<span id="cb1-14"><a href=""></a>    simulator<span class="op">=</span>simulator,</span>
+<span id="cb1-15"><a href=""></a>    adapter<span class="op">=</span>adapter,</span>
+<span id="cb1-16"><a href=""></a>    inference_network<span class="op">=</span>bf.networks.CouplingFlow(),   <span class="co"># normalizing flow</span></span>
+<span id="cb1-17"><a href=""></a>    summary_network<span class="op">=</span><span class="va">None</span>,                           <span class="co"># vector data → none needed</span></span>
+<span id="cb1-18"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment">
+<p><strong>Choosing a summary network:</strong> pass the one that matches the data type.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href=""></a>summary_network<span class="op">=</span>bf.networks.DeepSet()             <span class="co"># exchangeable set</span></span>
+<span id="cb2-2"><a href=""></a>summary_network<span class="op">=</span>bf.networks.TimeSeriesTransformer()  <span class="co"># time series</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="code-train-then-query-any-dataset" class="slide level2">
+<h2>Code: Train, then Query Any Dataset</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="co"># 4. Train on simulations (online: simulate fresh batches each step)</span></span>
+<span id="cb3-2"><a href=""></a>history <span class="op">=</span> workflow.fit_online(epochs<span class="op">=</span><span class="dv">50</span>, batch_size<span class="op">=</span><span class="dv">512</span>)</span>
+<span id="cb3-3"><a href=""></a></span>
+<span id="cb3-4"><a href=""></a><span class="co"># 5. Amortized inference: one forward pass per dataset</span></span>
+<span id="cb3-5"><a href=""></a>post <span class="op">=</span> workflow.sample(conditions<span class="op">=</span>{<span class="st">"y"</span>: y_obs}, num_samples<span class="op">=</span><span class="dv">2000</span>)</span>
+<span id="cb3-6"><a href=""></a><span class="co">#   -&gt; post["beta"]:  (2000, d) posterior draws</span></span>
+<span id="cb3-7"><a href=""></a></span>
+<span id="cb3-8"><a href=""></a><span class="co"># 500 new datasets, same network, no retraining:</span></span>
+<span id="cb3-9"><a href=""></a>post_many <span class="op">=</span> workflow.sample(conditions<span class="op">=</span>{<span class="st">"y"</span>: Y_new_500}, num_samples<span class="op">=</span><span class="dv">2000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="exercise-1" class="slide level2" data-background-color="#fcba00">
+<h2>Exercise 1</h2>
+<p><strong>From MCMC to Amortized Bayesian Inference</strong></p>
+<ul>
+<li>Revisit a Bayesian <strong>linear regression</strong> in Pyro.</li>
+<li>Hand the <em>same</em> Pyro model to BayesFlow as a <strong>simulator</strong> and train an amortized posterior.</li>
+<li>Check that the BayesFlow posterior matches MCMC on that dataset.</li>
+<li>Then time inference on 500 further datasets, without retraining.</li>
+</ul>
+<div class="qr-center">
+<p><img data-src="material/exercise_01.png" alt="QR code for exercise 1"></p>
+<p><strong><a href="https://colab.research.google.com/github/arrjon/BayesFlowTutorial/blob/main/01_Linear_Regression_Exercise.ipynb" target="_blank" data-preview-link="false">▶ Open in Colab 01_Linear_Regression at https://shorturl.at/dx6PM</a></strong></p>
+</div>
+</section></section>
+<section>
+<section id="part-2-does-it-work-calibration-misspecification" class="title-slide slide level1 special center" data-background-color="#004e9f">
+<h1>Part 2: Does It Work? Calibration &amp; Misspecification</h1>
+
+</section>
+<section id="two-distinct-questions" class="slide level2">
+<h2>Two Distinct Questions</h2>
+<p>We produce an approximation <span class="math inline">q(\boldsymbol{\theta}\mid\mathbf{y})</span> of the true posterior. Before we trust it, we must ask:</p>
+<div class="fragment">
+<ol type="1">
+<li><p><strong>Is the inference faithful?</strong> Does <span class="math inline">q</span> recover the correct posterior <em>under the assumed model</em>?</p>
+<p>→ <strong>calibration checks</strong> (SBC, TARP, C2ST).</p></li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="2" type="1">
+<li><p><strong>Is the model adequate?</strong> Does the model explain the <em>observed</em> data at all?</p>
+<p>→ <strong>posterior/prior predictive checks, misspecification detection</strong>.</p></li>
+</ol>
+</div>
+<div class="fragment">
+<ul>
+<li>A posterior predictive check alone <strong>cannot separate</strong> the two <span class="citation" data-cites="schmitt2024amortized">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Schmitt et al., 2024</a>)</span>.</li>
+<li>Amortization makes (1) cheap: re-running inference on thousands of simulated datasets costs a forward pass each.</li>
+</ul>
+</div>
+</section>
+<section id="simulation-based-calibration-sbc" class="slide level2">
+<h2>Simulation-Based Calibration (SBC)</h2>
+<p>SBC exploits a <strong>self-consistency</strong> property of the Bayesian joint <span class="citation" data-cites="talts2018validating cook2006validation">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Cook et al., 2006</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Talts et al., 2018</a>)</span>. Define <span class="math display">
+p_{\text{SBC}}(\mathbf{y},\boldsymbol{\theta},\tilde{\boldsymbol{\theta}})
+= p(\boldsymbol{\theta})\,p(\mathbf{y}\mid\boldsymbol{\theta})\,q(\tilde{\boldsymbol{\theta}}\mid\mathbf{y})
+= p(\mathbf{y})\,p(\boldsymbol{\theta}\mid\mathbf{y})\,q(\tilde{\boldsymbol{\theta}}\mid\mathbf{y})
+</span></p>
+<div class="fragment">
+<p>If <span class="math inline">q = p(\boldsymbol{\theta}\mid\mathbf{y})</span>, then <span class="math inline">\boldsymbol{\theta}</span> and <span class="math inline">\tilde{\boldsymbol{\theta}}</span> are <strong>identically distributed</strong> given <span class="math inline">\mathbf{y}</span>.</p>
+<p><strong>Testing procedure:</strong> for many draws <span class="math inline">(\boldsymbol{\theta}^{(r)},\mathbf{y}^{(r)})\sim p(\boldsymbol{\theta},\mathbf{y})</span>, sample <span class="math inline">\tilde{\boldsymbol{\theta}}\sim q(\cdot\mid\mathbf{y}^{(r)})</span> and compute the <strong>rank</strong> of the true <span class="math inline">\boldsymbol{\theta}^{(r)}</span> among posterior draws.</p>
+</div>
+<div class="fragment">
+<p><strong>Calibrated ⇒ ranks are uniform.</strong></p>
+</div>
+</section>
+<section id="empirical-cumulative-distribution-functions-as-a-diagnostic-tool" class="slide level2">
+<h2>Empirical Cumulative Distribution Functions as a Diagnostic Tool</h2>
+
+<img data-src="material/ecdf_diff.png" alt="SBC ECDF difference plot" class="r-stretch"><p>Plot the <strong>ECDF of ranks minus uniform</strong>, with simultaneous confidence bands. Inside the band → calibrated. <em>Image: <a href="https://hyunjimoon.github.io/SBC/articles/rank_visualizations.html">Martin Modrák</a>.</em></p>
+</section>
+<section id="sbc-in-practice-bayesflow" class="slide level2">
+<h2>SBC in Practice (BayesFlow)</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a><span class="co"># Simulate a fresh validation set the network never trained on</span></span>
+<span id="cb4-2"><a href=""></a>val <span class="op">=</span> simulator.sample(<span class="dv">1000</span>)</span>
+<span id="cb4-3"><a href=""></a>post <span class="op">=</span> workflow.sample(conditions<span class="op">=</span>val, num_samples<span class="op">=</span><span class="dv">500</span>)</span>
+<span id="cb4-4"><a href=""></a></span>
+<span id="cb4-5"><a href=""></a><span class="co"># Rank-ECDF calibration, per marginal</span></span>
+<span id="cb4-6"><a href=""></a>bf.diagnostics.plots.calibration_ecdf(</span>
+<span id="cb4-7"><a href=""></a>    estimates<span class="op">=</span>post, targets<span class="op">=</span>val</span>
+<span id="cb4-8"><a href=""></a>)</span>
+<span id="cb4-9"><a href=""></a><span class="co"># Recovery: posterior mean vs. ground truth</span></span>
+<span id="cb4-10"><a href=""></a>bf.diagnostics.plots.recovery(</span>
+<span id="cb4-11"><a href=""></a>   estimates<span class="op">=</span>post, targets<span class="op">=</span>val</span>
+<span id="cb4-12"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="a-caveat-marginal-sbc-is-necessary-not-sufficient" class="slide level2">
+<h2>A Caveat: Marginal SBC Is Necessary, Not Sufficient</h2>
+<p>Marginal rank checks can <strong>pass</strong> while the joint posterior is still wrong <span class="citation" data-cites="modrak2025simulation-based">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Modrák et al., 2025</a>)</span>.</p>
+<div class="fragment">
+<p>An estimator that ignores informative parts of the data may still show uniform marginal ranks, because errors can cancel across marginals.</p>
+</div>
+<div class="fragment">
+<p><strong>Fix:</strong> use <em>data-dependent</em> test quantities <span class="math inline">T(\boldsymbol{\theta},\mathbf{y})</span> so discrepancies accumulate instead of cancelling.</p>
+<ul>
+<li><strong>TARP</strong> <span class="citation" data-cites="lemos2023samplingbased">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Lemos et al., 2023</a>)</span>: the distance to a random reference point, which depends on the data. Matching <em>all</em> references ⇔ <span class="math inline">q=p</span>.</li>
+<li><strong>C2ST</strong> <span class="citation" data-cites="lopez-paz2017revisiting yao2023discriminative">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Lopez-Paz and Oquab, 2017</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Yao and Domke, 2023</a>)</span>: train a classifier to tell true joint <span class="math inline">p(\boldsymbol{\theta},\mathbf{y})</span> from approximate joint <span class="math inline">q(\boldsymbol{\theta}\mid\mathbf{y})p(\mathbf{y})</span>. Accuracy <span class="math inline">\approx 0.5</span> ⇒ indistinguishable.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="co"># TARP</span></span>
+<span id="cb5-2"><a href=""></a>bf.diagnostics.metrics.accuracy_random_points(</span>
+<span id="cb5-3"><a href=""></a>    estimates<span class="op">=</span>post, targets<span class="op">=</span>val</span>
+<span id="cb5-4"><a href=""></a>)</span>
+<span id="cb5-5"><a href=""></a><span class="co"># C2ST</span></span>
+<span id="cb5-6"><a href=""></a>bf.diagnostics.metrics.classifier_two_sample_test(</span>
+<span id="cb5-7"><a href=""></a>   estimates<span class="op">=</span>post[<span class="dv">0</span>],  <span class="co"># for one dataset</span></span>
+<span id="cb5-8"><a href=""></a>   targets<span class="op">=</span>reference</span>
+<span id="cb5-9"><a href=""></a>)</span>
+<span id="cb5-10"><a href=""></a><span class="co"># or concatenate posterior samples and data to test the joint</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="model-misspecification" class="slide level2">
+<h2>Model Misspecification</h2>
+<p>Calibration assumes the model generated the data. Real simulators are imperfect:</p>
+<p><span class="math display">
+\mathbf{y}_{\text{obs}} \nsim p(\mathbf{y}\mid\boldsymbol{\theta})\ \text{for any}\ \boldsymbol{\theta}
+</span></p>
+<div class="fragment">
+<p>This is a particular danger for amortized SBI. The network only ever saw the <strong>prior predictive</strong>, so if <span class="math inline">\mathbf{y}_{\text{obs}}</span> falls outside that region it extrapolates and returns a confident but wrong posterior <span class="citation" data-cites="frazier2024the schmitt2023detecting">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Frazier et al., 2024</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Schmitt et al., 2023</a>)</span>.</p>
+</div>
+<div class="fragment">
+<ul>
+<li>Nothing raises an error: the estimator returns a posterior either way.</li>
+<li>The mismatch has to be <strong>detected</strong> explicitly.</li>
+</ul>
+</div>
+</section>
+<section id="detecting-misspecification" class="slide level2">
+<h2>Detecting Misspecification</h2>
+<div class="fragment">
+<p><strong>Prior/posterior predictive check.</strong> Simulate replicated data <span class="math inline">\mathbf{y}^\ast</span> from the fitted posterior; compare a test statistic <span class="math inline">T</span> to <span class="math inline">T(\mathbf{y}_{\text{obs}})</span>: <span class="math display">
+p_{\text{ppc}} = \Pr\{T(\mathbf{y}^\ast)\ge T(\mathbf{y}_{\text{obs}})\mid\mathbf{y}_{\text{obs}}\}
+</span> Extreme tail probability ⇒ the model cannot reproduce the data.</p>
+</div>
+<div class="fragment">
+<p><strong>Summary-space distance.</strong> During training, learn the summary <span class="math inline">s(\mathbf{y})</span> under a distribution-matching penalty, for example MMD to <span class="math inline">\mathcal{N}(\mathbf{0},\mathbf{I})</span> <span class="citation" data-cites="schmitt2023detecting">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Schmitt et al., 2023</a>)</span>. At test time, an observation whose summary <span class="math inline">s(\mathbf{y}_{\text{obs}})</span> is an outlier in that space <strong>flags</strong> misspecification.</p>
+</div>
+<div class="fragment">
+<p>The two checks answer different questions, so run both: calibration on simulations, and predictive adequacy on the real observation.</p>
+</div>
+</section>
+<section id="exercise-2" class="slide level2" data-background-color="#fcba00">
+<h2>Exercise 2</h2>
+<p><strong>Epidemic Time Series &amp; Diagnostics</strong></p>
+<ul>
+<li>Amortized posterior for a mechanistic <strong>SIR</strong> model (ODE + noisy reporting).</li>
+<li>A <strong>recurrent (GRU)</strong> summary network for the case-count time series.</li>
+<li>Run and interpret the diagnostic suite: SBC ECDF, recovery, contraction.</li>
+<li>Then confront the network with <strong>real COVID-19 data</strong> and judge model adequacy.</li>
+</ul>
+<div class="qr-center">
+<p><img data-src="material/exercise_02.png" alt="QR code for exercise 2"></p>
+<p><strong><a href="https://colab.research.google.com/github/arrjon/BayesFlowTutorial/blob/main/02_SIR_Diagnostics_Exercise.ipynb" target="_blank" data-preview-link="false">▶ Open in Colab 02_SIR_Diagnostics at https://shorturl.at/7VdI6</a></strong></p>
+</div>
+</section></section>
+<section>
+<section id="part-3-diffusion-models-flow-matching-and-consistency-models" class="title-slide slide level1 special center" data-background-color="#004e9f">
+<h1>Part 3: Diffusion Models, Flow Matching, and Consistency Models</h1>
+
+</section>
+<section id="why-go-beyond-normalizing-flows" class="slide level2">
+<h2>Why Go Beyond Normalizing Flows?</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Family</th>
+<th>Architecture</th>
+<th>Sampling</th>
+<th>Density</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Normalizing Flows</td>
+<td><strong>constrained</strong> (invertible)</td>
+<td>1 step</td>
+<td>fast</td>
+</tr>
+<tr class="even">
+<td>Diffusion Models</td>
+<td>free-form</td>
+<td>multi-step</td>
+<td>slow</td>
+</tr>
+<tr class="odd">
+<td>Flow Matching</td>
+<td>free-form</td>
+<td>multi-step</td>
+<td>slow</td>
+</tr>
+<tr class="even">
+<td>Consistency Models</td>
+<td>free-form</td>
+<td>few-step</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p>Dropping invertibility frees the architecture. What we gain is expressivity and, more importantly for the rest of this part, the ability to <strong>steer sampling after training</strong>. What we pay is sampling speed and, for consistency models, the density.</p>
+</div>
+</section>
+<section id="benchmarking-diffusion-models" class="slide level2">
+<h2>Benchmarking Diffusion Models</h2>
+
+<img data-src="material/c2st_benchmark_boxplot_best.png" alt="Diffusion model benchmark" class="r-stretch"><p>C2ST across ten benchmark tasks, so lower is better and <span class="math inline">0.5</span> means indistinguishable from the reference posterior. The dashed line is the normalizing flow baseline of Lueckmann et al. <span class="citation" data-cites="arruda2025diffusion">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Arruda et al., 2025</a>)</span></p>
+</section>
+<section id="diffusion-models" class="slide level2">
+<h2>Diffusion Models</h2>
+
+<img data-src="material/diffusion_model_review.png" alt="Diffusion model overview: forward/backward process, training and inference" class="r-stretch"><p>Forward noising (<span class="math inline">\mathbf{z}_t=\alpha_t\mathbf{z}_0+\sigma_t\epsilon</span>) → train the network on <span class="math inline">\omega_t L_t(\hat{\mathbf{z}},\mathbf{z})</span> → backward via an <strong>ODE/SDE solver</strong> <span class="citation" data-cites="arruda2025diffusion">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Arruda et al., 2025</a>)</span>.</p>
+</section>
+<section id="diffusion-the-forward-process" class="slide level2">
+<h2>Diffusion: The Forward Process</h2>
+<p>Start at the target <span class="math inline">\mathbf{z}_0 = \boldsymbol{\theta}</span>. Gradually add noise via an SDE <span class="citation" data-cites="song2021score-based">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Song et al., 2021</a>)</span>: <span class="math display">
+\mathrm{d}\mathbf{z}_t = f(t)\,\mathbf{z}_t\,\mathrm{d}t + g(t)\,\mathrm{d}\mathbf{W}_t
+</span></p>
+<div class="fragment">
+<p>The forward transition is <strong>Gaussian in closed form</strong>, so nothing has to be simulated: <span class="math display">
+p(\mathbf{z}_t\mid\mathbf{z}_0)=\mathcal{N}(\alpha_t\mathbf{z}_0,\sigma_t^2\mathbf{I})
+\quad\Longleftrightarrow\quad
+\mathbf{z}_t = \alpha_t\mathbf{z}_0 + \sigma_t\boldsymbol{\epsilon},\ \ \boldsymbol{\epsilon}\sim\mathcal{N}(\mathbf{0},\mathbf{I})
+</span> We can jump to any noise level <span class="math inline">t</span> directly.</p>
+</div>
+</section>
+<section id="forward-process-on-a-checkerboard" class="slide level2">
+<h2>Forward Process on a Checkerboard</h2>
+<video src="media/videos/manim_diffusion/1080p60/ForwardNoising.mp4" data-autoplay="" autoplay="" loop="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
+</video>
+<p>A checkerboard target <span class="math inline">\mathbf{z}_0</span> melts into isotropic Gaussian noise as <span class="math inline">t:0\!\to\!1</span>.</p>
+</section>
+<section id="diffusion-the-reverse-process" class="slide level2">
+<h2>Diffusion: The Reverse Process</h2>
+<p>The forward SDE has a <strong>time-reversal</strong> <span class="citation" data-cites="anderson1982reverse-time">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Anderson, 1982</a>)</span>: <span class="math display">
+\mathrm{d}\mathbf{z}_t = \big[f(t)\mathbf{z}_t - g(t)^2\, \nabla_{\mathbf{z}_t}\!\log p_t(\mathbf{z}_t)\big]\,\mathrm{d}t + g(t)\,\mathrm{d}\bar{\mathbf{W}}_t
+</span></p>
+<div class="fragment">
+<p>The only unknown is the <strong>score</strong> <span class="math inline">\nabla_{\mathbf{z}_t}\log p_t(\mathbf{z}_t)</span>. Learn it, and we can integrate backwards from noise to a sample.</p>
+</div>
+</section>
+<section id="denoising-score-matching" class="slide level2">
+<h2>Denoising Score Matching</h2>
+<p>Regress a network <span class="math inline">\hat{s}</span> onto the score of the (Gaussian) noising kernel: <span class="math display">
+\hat{s} = \arg\min_{s}\;
+\mathbb{E}_{\mathbf{z}_0,\mathbf{y},\boldsymbol{\epsilon},t}\Big[\omega_t\,\big\Vert s(\mathbf{z}_t,\mathbf{y},t) - \nabla_{\mathbf{z}_t}\log p(\mathbf{z}_t\mid\mathbf{z}_0)\big\Vert_2^2\Big]
+</span></p>
+<p>This has the <strong>same minimizer</strong> as regression on the marginal <span class="math inline">\nabla_{\mathbf{z}_t}\log p(\mathbf{z}_t)</span> <span class="citation" data-cites="vincent2011connection song2021score-based">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Song et al., 2021</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Vincent, 2011</a>)</span>. The neural network can be <strong>any architecture</strong> which predicts a score, e.g., a MLP <span class="citation" data-cites="sharrock2024sequential">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Sharrock et al., 2024</a>)</span> or a transformer <span class="citation" data-cites="gloeckler2024all-in-one">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Gloeckler et al., 2024</a>)</span>.</p>
+<div class="fragment">
+<p>Because <span class="math inline">\mathbf{z}_t = \alpha_t\mathbf{z}_0 + \sigma_t\boldsymbol{\epsilon}</span> is Gaussian, the conditional target is <strong>known in closed form</strong>: <span class="math display">
+\nabla_{\mathbf{z}_t}\log p(\mathbf{z}_t\mid\mathbf{z}_0) = -\boldsymbol{\epsilon}/\sigma_t
+</span></p>
+<p>Training therefore reduces to <strong>noise prediction</strong>: draw <span class="math inline">(\mathbf{z}_0,\mathbf{y})</span> from simulations, <span class="math inline">t\sim\mathcal{U}[0,1]</span>, and <span class="math inline">\boldsymbol{\epsilon}\sim\mathcal{N}(\mathbf{0},\mathbf{I})</span>.</p>
+</div>
+<div class="fragment">
+<p>Predicting <span class="math inline">\mathbf{z}_0</span>, <span class="math inline">\boldsymbol{\epsilon}</span>, the velocity, or the score are equivalent parameterizations of the same object. Which one you regress on is a <strong>design choice</strong>.</p>
+</div>
+</section>
+<section id="what-the-learned-score-looks-like" class="slide level2">
+<h2>What the Learned Score Looks Like</h2>
+<video src="media/videos/manim_diffusion/1080p60/ScoreField.mp4" data-autoplay="" autoplay="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
+</video>
+<p>The <em>trained</em> model’s score <span class="math inline">s(\mathbf{z},t)\approx\nabla_{\mathbf{z}}\log p_t(\mathbf{z})</span> points toward the data cells and vanishes inside them.</p>
+</section>
+<section id="reverse-process-stochastic-sde" class="slide level2">
+<h2>Reverse Process: Stochastic SDE</h2>
+<video src="media/videos/manim_diffusion/1080p60/ReverseSDE.mp4" data-autoplay="" autoplay="" loop="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
+</video>
+<p>The <strong>reverse SDE</strong> injects noise at every step.</p>
+</section>
+<section id="reverse-sde-close-up-on-the-final-steps" class="slide level2">
+<h2>Reverse SDE: Close-Up on the Final Steps</h2>
+<video src="media/videos/manim_diffusion/1080p60/ReverseSDEWindow.mp4" data-autoplay="" autoplay="" loop="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
+</video>
+<p>The same trajectory, zoomed into the last time steps.</p>
+</section>
+<section id="from-sde-to-ode-flow-matching" class="slide level2">
+<h2>From SDE to ODE: Flow Matching</h2>
+<p>The reverse SDE has a deterministic twin, the <strong>probability-flow ODE</strong> with the <em>same</em> marginals: <span class="math display">
+\mathrm{d}\mathbf{z}_t = \Big[f(t)\mathbf{z}_t - \tfrac{1}{2}g(t)^2\, s(\mathbf{z}_t,\mathbf{y},t)\Big]\mathrm{d}t = v(\mathbf{z}_t,\mathbf{y},t)\,\mathrm{d}t
+</span></p>
+<div class="fragment">
+<p><strong>Flow matching</strong> <span class="citation" data-cites="lipman2023flow wildberger2023flow">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Lipman et al., 2023</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Wildberger et al., 2023</a>)</span> skips the score and regresses the <strong>velocity field</strong> <span class="math inline">v</span> directly, along a chosen interpolation between noise and data: <span class="math display">
+\hat{v} = \arg\min_v\; \mathbb{E}_{t,\mathbf{z}_0,\boldsymbol{\epsilon}}\big[\Vert v(\mathbf{z}_t,\mathbf{y},t) - (\dot\alpha_t\mathbf{z}_0 + \dot\sigma_t\boldsymbol{\epsilon})\Vert_2^2\big]
+</span></p>
+<ul>
+<li>Straighter paths, so usually fewer integration steps.</li>
+<li><strong>Density evaluation</strong> is available by integrating the Jacobian trace along the ODE, but it is expensive.</li>
+</ul>
+</div>
+</section>
+<section id="reverse-process-deterministic-ode" class="slide level2">
+<h2>Reverse Process: Deterministic ODE</h2>
+<video src="media/videos/manim_diffusion/1080p60/ReverseODE.mp4" data-autoplay="" autoplay="" loop="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
+</video>
+<p>The <strong>probability-flow ODE</strong> has the <em>same marginals</em> as the SDE, but each sample now follows a single deterministic path.</p>
+</section>
+<section id="consistency-models" class="slide level2">
+<h2>Consistency Models</h2>
+<ul>
+<li>Both the SDE and the ODE need many solver steps, which makes sampling slow.</li>
+<li><strong>Consistency models</strong> <span class="citation" data-cites="song2023consistency schmitt2025consistency">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Schmitt et al., 2025</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Song et al., 2023</a>)</span> learn a map that is <strong>invariant along a trajectory</strong>.</li>
+<li>It can jump straight to the endpoint: <span class="math display">
+c(\mathbf{z}_t,\mathbf{y},t) = c(\mathbf{z}_{t'},\mathbf{y},t'),\qquad c(\mathbf{z}_0,\mathbf{y},0)=\mathbf{z}_0
+</span></li>
+</ul>
+<div class="fragment">
+<p>Parameterize <span class="math inline">c(\mathbf{z}_t,\mathbf{y},t) = c_{\text{skip}}(t)\,\mathbf{z}_t + c_{\text{out}}(t)\,F(\mathbf{z}_t,\mathbf{y},t)</span> with <span class="math inline">c_{\text{skip}}(0)=1,\ c_{\text{out}}(0)=0</span>, and train outputs to <strong>agree at nearby times</strong>: <span class="math display">
+\min_c\ \mathbb{E}\big[\omega_t\, d\big(c(\mathbf{z}_t,\mathbf{y},t),\ \bar c(\mathbf{z}_{t-\Delta t},\mathbf{y},t-\Delta t)\big)\big]
+</span> → <strong>one- or few-step</strong> sampling: jump to the endpoint, re-noise to a lower level, and refine.</p>
+</div>
+</section>
+<section id="consistency-sampling-few-discrete-steps" class="slide level2">
+<h2>Consistency Sampling: Few Discrete Steps</h2>
+<video src="media/videos/manim_diffusion/1080p60/ConsistencyMultistep.mp4" data-autoplay="" autoplay="" loop="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
+</video>
+<p>Each step <strong>jumps straight to data</strong>, then <strong>re-noises</strong> to a lower level.</p>
+</section>
+<section id="the-diffusion-model-family" class="slide level2">
+<h2>The Diffusion Model Family</h2>
+
+<img data-src="material/fm_cm_visual.png" alt="Diffusion, flow matching, and consistency models" class="r-stretch"><p>Diffusion model (stochastic) · flow matching (deterministic ODE) · consistency model (direct jump).</p>
+</section>
+<section id="post-hoc-guidance" class="slide level2">
+<h2>Post-Hoc Guidance</h2>
+<p>This is what the free-form architecture bought us. The score is <strong>additive</strong>, so sampling can be steered after training by adding a gradient term.</p>
+
+<img data-src="material/adaptive_inference.png" alt="Post-hoc guidance" class="r-stretch"><p><span class="math display">
+\nabla_{\boldsymbol{\theta}_t}\log p(\boldsymbol{\theta}_t\mid\text{extra}) \approx \hat{s}(\boldsymbol{\theta}_t,\mathbf{y},t) + \nabla_{\boldsymbol{\theta}_t}\log g(\boldsymbol{\theta}_t)
+</span></p>
+<p>Impose constraints, change the prior, or compose models without retraining <span class="citation" data-cites="bansal2023universal yang2026priorguide">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Bansal et al., 2023</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Yang et al., 2026</a>)</span>.</p>
+</section>
+<section id="careful-guidance-changes-the-target" class="slide level2">
+<h2>Careful: Guidance Changes the Target</h2>
+<p>Guidance modifies the reverse-time marginals, so the density you sample from is generally <strong>not</strong> the one you intended <span class="citation" data-cites="chidambaram2024what">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Chidambaram et al., 2024</a>)</span>.</p>
+<ul>
+<li>Samples can be <strong>biased</strong>, and how badly depends on the type of guidance.</li>
+<li>Correction samplers (Langevin, MCMC, or weighting) can recover the target <span class="citation" data-cites="geffner2023compositional skreta2025feynman">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Geffner et al., 2023</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Skreta et al., 2025</a>)</span>.</li>
+</ul>
+<div class="fragment">
+<p>So re-check calibration <em>after</em> guidance, with the tools from Part 2.</p>
+</div>
+</section>
+<section id="revisiting-hierarchical-models" class="slide level2">
+<h2>Revisiting Hierarchical Models</h2>
+<p>Data comes in <strong>groups</strong> (subjects, experiments, sites): local variation, shared global structure <span class="citation" data-cites="gelman2013bayesian">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Gelman et al., 2013</a>)</span>.</p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<p><span class="math display">
+\boldsymbol{\eta}\sim p(\boldsymbol{\eta}),\quad
+\boldsymbol{\theta}^{(r)}\sim p(\boldsymbol{\theta}\mid\boldsymbol{\eta}),\quad
+\mathbf{y}^{(r)}\sim p(\mathbf{y}\mid\boldsymbol{\theta}^{(r)})
+</span></p>
+<p>Two coupled inference targets: <span class="math display">
+p(\boldsymbol{\eta}\mid\{\mathbf{y}^{(r)}\}_{r=1}^R),\qquad
+p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
+</span></p>
+<p><strong>Bottleneck:</strong> simulation of a single observation is a <em>set of sets</em>.</p>
+</div><div class="column" style="width:45%;">
+<p><img data-src="material/bayesian-models-2-color%20small.png" alt="Hierarchical Bayesian model"></p>
+</div></div>
+</section>
+<section id="compositional-hierarchical-inference" class="slide level2">
+<h2>Compositional Hierarchical Inference</h2>
+<p>Additive scores also solve the hierarchical bottleneck Compose <strong>per-group</strong> posteriors instead of simulating the full hierarchy <span class="citation" data-cites="arruda2026compositional">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Arruda et al., 2026</a>)</span>: <span class="math display">
+\nabla_{\boldsymbol{\eta}}\log p(\boldsymbol{\eta}\mid\{\mathbf{y}^{(r)}\}) = (1-R)\nabla_{\boldsymbol{\eta}}\log p(\boldsymbol{\eta}) + \sum_{r=1}^R \nabla_{\boldsymbol{\eta}}\log p(\boldsymbol{\eta}\mid\mathbf{y}^{(r)})
+</span></p>
+<div class="fragment">
+<p>Train on <strong>single groups</strong>; at inference, <strong>add the scores</strong> and sample the reverse SDE. This scales to <strong>250K+ groups</strong>, with a total simulation budget smaller than one simulation of the full hierarchical model.</p>
+</div>
+</section>
+<section id="revisiting-the-robot-arm" class="slide level2">
+<h2>Revisiting the Robot Arm</h2>
+<p>Back to the toy example from Part 1. A diffusion model with a plain MLP score net recovers the multimodal, non-identifiable geometry:</p>
+
+<img data-src="material/simple%20example%20result.png" alt="Diffusion posterior on robot arm" class="r-stretch"></section>
+<section id="exercise-3" class="slide level2" data-background-color="#fcba00">
+<h2>Exercise 3</h2>
+<p><strong>Diffusion Models &amp; Custom Guidance</strong></p>
+<ul>
+<li>Train a <strong>diffusion</strong> posterior for the multimodal <strong>inverse-kinematics</strong> arm.</li>
+<li>Compare it against a normalizing flow and a <strong>consistency</strong> model.</li>
+<li><strong>Write your own guidance constraint</strong> and steer sampling after training via <code>guidance_kwargs</code>.</li>
+</ul>
+<div class="qr-center">
+<p><img data-src="material/exercise_03.png" alt="QR code for exercise 3"></p>
+<p><strong><a href="https://colab.research.google.com/github/arrjon/BayesFlowTutorial/blob/main/03_Diffusion_Guidance_Exercise.ipynb" target="_blank" data-preview-link="false">▶ Open in Colab 03_Diffusion_Guidance at https://shorturl.at/jTU9J</a></strong></p>
+</div>
+</section>
+<section id="take-home" class="slide level2">
+<h2>Take-Home</h2>
+<ol type="1">
+<li><strong>SBI</strong> needs nothing but a simulator you can sample.</li>
+<li><strong>Amortization</strong> trades a one-time training cost for instant inference on any dataset.</li>
+<li>A <strong>summary network</strong> encodes the structure of the data (set, time series, hierarchy).</li>
+<li><strong>Validate two things separately:</strong> SBC for calibration, predictive checks for misspecification.</li>
+<li><strong>Diffusion, flow matching, and consistency models</strong> drop invertibility, which is what makes them <strong>steerable after training</strong>.</li>
+</ol>
+<div class="fragment">
+<p><strong>Some open questions I am thinking about currently:</strong></p>
+<ul>
+<li>Which density do we target after post-hoc guidance?</li>
+<li>Can we guide a consistency model?</li>
+<li>What to amortize over vs.&nbsp;adapt post hoc?</li>
+</ul>
+</div>
+<div class="fragment">
+<p><strong>Whatever you build: check it with simulation-based calibration.</strong></p>
+</div>
+</section>
+<section id="additional-resources" class="slide level2 smaller scrollable">
+<h2>Additional Resources</h2>
+<div class="resources-slide">
+<div class="qr-center">
+<div class="columns" style="align-items:center;justify-content:center;">
+<div class="column" style="width:60%;">
+<p><img data-src="material/ddm_paper.png" class="paper-img" alt="Review Paper Title"></p>
+</div><div class="column" style="width:40%;">
+<p><img data-src="material/qrcode.png" alt="QR code for tutorial review paper"></p>
+</div></div>
+<p><strong>Tutorial review paper</strong>: 50+ SBI &amp; diffusion models papers, benchmarks, and discussion of design choices.</p>
+<p><strong><a href="https://github.com/arrjon/BayesFlowTutorial" target="_blank" data-preview-link="false">▶ Tutorial with Solutions: https://github.com/arrjon/BayesFlowTutorial</a></strong></p>
+<p>jonas.arruda@uni-bonn.de</p>
+</div>
+<div class="logo-row">
+<p><img data-src="material/UNI_Bonn_Logo_Standard_.jpg" alt="University of Bonn logo"> <img data-src="material/BIGS-Logo.png" alt="BIGS logo"> <img data-src="material/bcml.webp" alt="BCML logo"></p>
+</div>
+</div>
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-anderson1982reverse-time" class="csl-entry" role="listitem">
+Anderson (1982). Reverse-time diffusion equation models. <em>Stochastic Processes and their Applications</em>, <strong>12</strong>(3), 313–326. Elsevier. doi:<a href="https://doi.org/10.1016/0304-4149(82)90051-5">10.1016/0304-4149(82)90051-5</a>.
+</div>
+<div id="ref-arruda2025diffusion" class="csl-entry" role="listitem">
+Arruda, Bracher, Köthe, Hasenauer, and Radev (2025). Diffusion models in simulation-based inference: A tutorial review. <em>arXiv preprint arXiv:2512.20685</em>.
+</div>
+<div id="ref-arruda2026compositional" class="csl-entry" role="listitem">
+Arruda, Pandey, Sherry, Barroso, Intes, Hasenauer, and Radev (2026). <a href="https://openreview.net/forum?id=N3XCVHZGW5">Compositional amortized inference for large-scale hierarchical bayesian models</a>. <em>The fourteenth international conference on learning representations</em>.
+</div>
+<div id="ref-bansal2023universal" class="csl-entry" role="listitem">
+Bansal, Chu, Schwarzschild, Sengupta, Goldblum, Geiping, and Goldstein (2023). Universal guidance for diffusion models. <em>Proceedings of the IEEE/CVF conference on computer vision and pattern recognition</em>, 843–852. doi:<a href="https://doi.org/10.1109/cvprw59228.2023.00091">10.1109/cvprw59228.2023.00091</a>.
+</div>
+<div id="ref-chidambaram2024what" class="csl-entry" role="listitem">
+Chidambaram, Gatmiry, Chen, Lee, and Lu (2024). <a href="https://openreview.net/forum?id=AdS3H8SaPi">What does guidance do? A fine-grained analysis in a simple setting</a>. <em>The thirty-eighth annual conference on neural information processing systems</em>.
+</div>
+<div id="ref-cook2006validation" class="csl-entry" role="listitem">
+Cook, Gelman, and Rubin (2006). Validation of software for <span>B</span>ayesian models using posterior quantiles. <em>Journal of Computational and Graphical Statistics</em>, <strong>15</strong>(3), 675–692. Taylor &amp; Francis. doi:<a href="https://doi.org/10.1198/106186006x136976">10.1198/106186006x136976</a>.
+</div>
+<div id="ref-dinh2017density" class="csl-entry" role="listitem">
+Dinh, Sohl-Dickstein, and Bengio (2017). <a href="https://openreview.net/forum?id=HkpbnH9lx">Density estimation using real <span>NVP</span></a>. <em>International conference on learning representations</em>.
+</div>
+<div id="ref-draxler2024universality" class="csl-entry" role="listitem">
+Draxler, Wahl, Schnörr, and Köthe (2024). <em><a href="https://dl.acm.org/doi/10.5555/3692070.3692531">On the universality of coupling-based normalizing flows</a></em>. JMLR.org.
+</div>
+<div id="ref-durkan2019neural" class="csl-entry" role="listitem">
+Durkan, Bekasov, Murray, and Papamakarios (2019). Neural spline flows. <em>Advances in neural information processing systems</em>, <strong>32</strong>.
+</div>
+<div id="ref-frazier2024the" class="csl-entry" role="listitem">
+Frazier, Kelly, Drovandi, and Warne (2024). The statistical accuracy of neural posterior and likelihood estimation. <em>arXiv preprint arXiv:2411.12068</em>. doi:<a href="https://doi.org/10.48550/arXiv.2411.12068">10.48550/arXiv.2411.12068</a>.
+</div>
+<div id="ref-geffner2023compositional" class="csl-entry" role="listitem">
+Geffner, Papamakarios, and Mnih (2023). <a href="https://proceedings.mlr.press/v202/geffner23a.html">Compositional score modeling for simulation-based inference</a>. <em>Proceedings of the 40th international conference on machine learning</em>, <strong>202</strong>, 11098–11116. PMLR.
+</div>
+<div id="ref-gelman2013bayesian" class="csl-entry" role="listitem">
+Gelman, Carlin, Stern, Dunson, Vehtari, and Rubin (2013). <em><span>B</span>ayesian data analysis (3rd edition)</em>. Chapman; Hall/CRC. doi:<a href="https://doi.org/10.1201/b16018">10.1201/b16018</a>.
+</div>
+<div id="ref-gloeckler2024all-in-one" class="csl-entry" role="listitem">
+Gloeckler, Deistler, Weilbach, Wood, and Macke (2024). <a href="https://dl.acm.org/doi/10.5555/3692070.3692700">All-in-one simulation-based inference</a>. <em>Proceedings of the 41st international conference on machine learning</em>. JMLR.org.
+</div>
+<div id="ref-kruse2021benchmarking" class="csl-entry" role="listitem">
+Kruse, Ardizzone, Rother, and Köthe (2021). Benchmarking invertible architectures on inverse problems. <em>arXiv preprint arXiv:2101.10763</em>. doi:<a href="https://doi.org/10.48550/arXiv.2101.10763">10.48550/arXiv.2101.10763</a>.
+</div>
+<div id="ref-lee2019set" class="csl-entry" role="listitem">
+Lee, Lee, Kim, Kosiorek, Choi, and Teh (2019). <a href="https://proceedings.mlr.press/v97/lee19d.html">Set transformer: A framework for attention-based permutation-invariant neural networks</a>. <em>Proceedings of the 36th international conference on machine learning</em>, <strong>97</strong>, 3744–3753. PMLR.
+</div>
+<div id="ref-lemos2023samplingbased" class="csl-entry" role="listitem">
+Lemos, Coogan, Hezaveh, and Perreault-Levasseur (2023). <em>Sampling-<span>Based Accuracy Testing</span> of <span>Posterior Estimators</span> for <span>General Inference</span></em>. doi:<a href="https://doi.org/10.48550/arXiv.2302.03026">10.48550/arXiv.2302.03026</a>.
+</div>
+<div id="ref-lipman2023flow" class="csl-entry" role="listitem">
+Lipman, Chen, Ben-Hamu, Nickel, and Le (2023). <a href="https://openreview.net/forum?id=PqvMRDCJT9t">Flow matching for generative modeling</a>. <em>The eleventh international conference on learning representations</em>.
+</div>
+<div id="ref-lopez-paz2017revisiting" class="csl-entry" role="listitem">
+Lopez-Paz and Oquab (2017). <a href="https://openreview.net/forum?id=SJkXfE5xx">Revisiting classifier two-sample tests</a>. <em>International conference on learning representations</em>.
+</div>
+<div id="ref-modrak2025simulation-based" class="csl-entry" role="listitem">
+Modrák, Moon, Kim, Bürkner, Huurre, Faltejsková, Gelman, and Vehtari (2025). Simulation-based calibration checking for <span>B</span>ayesian computation: The choice of test quantities shapes sensitivity. <em><span>B</span>ayesian Analysis</em>, <strong>20</strong>(2), 461–488. International Society for <span>B</span>ayesian Analysis. doi:<a href="https://doi.org/10.1214/23-ba1404">10.1214/23-ba1404</a>.
+</div>
+<div id="ref-papamakarios2021normalizing" class="csl-entry" role="listitem">
+Papamakarios, Nalisnick, Rezende, Mohamed, and Lakshminarayanan (2021). Normalizing flows for probabilistic modeling and inference. <em>Journal of Machine Learning Research</em>, <strong>22</strong>(57), 1–64.
+</div>
+<div id="ref-radev2020bayesflow" class="csl-entry" role="listitem">
+Radev, Mertens, Voss, Ardizzone, and Kothe (2020). <span>BayesFlow</span>: Learning complex stochastic models with invertible neural networks. <em>IEEE Transactions on Neural Networks and Learning Systems</em>, <strong>33</strong>(4), 1452–1466. Institute of Electrical; Electronics Engineers (IEEE). doi:<a href="https://doi.org/10.1109/tnnls.2020.3042395">10.1109/tnnls.2020.3042395</a>.
+</div>
+<div id="ref-rezende2015variational" class="csl-entry" role="listitem">
+Rezende and Mohamed (2015). Variational inference with normalizing flows. <em>Proceedings of the 32nd International Conference on Machine Learning (ICML)</em>, 1530–1538. PMLR.
+</div>
+<div id="ref-schmitt2023detecting" class="csl-entry" role="listitem">
+Schmitt, Bürkner, Köthe, and Radev (2023). Detecting model misspecification in amortized <span>B</span>ayesian inference with neural networks. <em>Dagm german conference on pattern recognition</em>, 541–557. Springer. doi:<a href="https://doi.org/10.1007/978-3-031-54605-1_35">10.1007/978-3-031-54605-1_35</a>.
+</div>
+<div id="ref-schmitt2024amortized" class="csl-entry" role="listitem">
+Schmitt, Li, Vehtari, Acerbi, Bürkner, and Radev (2024). <em><a href="http://arxiv.org/abs/2409.04332">Amortized <span>Bayesian Workflow</span> (<span>Extended Abstract</span>)</a></em>.
+</div>
+<div id="ref-schmitt2025consistency" class="csl-entry" role="listitem">
+Schmitt, Pratz, Köthe, Bürkner, and Radev (2025). <a href="https://dl.acm.org/doi/abs/10.5555/3737916.3741946">Consistency models for scalable and fast simulation-based inference</a>. <em>Proceedings of the 38th international conference on neural information processing systems</em>. Curran Associates Inc.
+</div>
+<div id="ref-sharrock2024sequential" class="csl-entry" role="listitem">
+Sharrock, Simons, Liu, and Beaumont (2024). <a href="https://dl.acm.org/doi/10.5555/3692070.3693884">Sequential neural score estimation: Likelihood-free inference with conditional score based diffusion models</a>. <em>Proceedings of the 41st international conference on machine learning</em>. JMLR.org.
+</div>
+<div id="ref-skreta2025feynman" class="csl-entry" role="listitem">
+Skreta, Akhound-Sadegh, Ohanesian, Bondesan, Aspuru-Guzik, Doucet, Brekelmans, Tong, and Neklyudov (2025). <a href="https://proceedings.mlr.press/v267/skreta25a.html">Feynman-kac correctors in diffusion: Annealing, guidance, and product of experts</a>. <em>Proceedings of the 42nd international conference on machine learning</em>, <strong>267</strong>, 55906–55949. PMLR.
+</div>
+<div id="ref-song2023consistency" class="csl-entry" role="listitem">
+Song, Dhariwal, Chen, and Sutskever (2023). <a href="https://dl.acm.org/doi/10.5555/3618408.3619743">Consistency models</a>. <em>Proceedings of the 40th international conference on machine learning</em>. JMLR.org.
+</div>
+<div id="ref-song2021score-based" class="csl-entry" role="listitem">
+Song, Sohl-Dickstein, Kingma, Kumar, Ermon, and Poole (2021). Score-based generative modeling through stochastic differential equations. <em>International conference on learning representations</em>.
+</div>
+<div id="ref-talts2018validating" class="csl-entry" role="listitem">
+Talts, Betancourt, Simpson, Vehtari, and Gelman (2018). Validating <span>B</span>ayesian inference algorithms with simulation-based calibration. <em>arXiv preprint arXiv:1804.06788</em>. doi:<a href="https://doi.org/10.48550/arXiv.1804.06788">10.48550/arXiv.1804.06788</a>.
+</div>
+<div id="ref-vincent2011connection" class="csl-entry" role="listitem">
+Vincent (2011). A connection between score matching and denoising autoencoders. <em>Neural computation</em>, <strong>23</strong>(7), 1661–1674. MIT Press. doi:<a href="https://doi.org/10.1162/NECO_a_00142">10.1162/NECO_a_00142</a>.
+</div>
+<div id="ref-wildberger2023flow" class="csl-entry" role="listitem">
+Wildberger, Dax, Buchholz, Green, Macke, and Schölkopf (2023). <a href="https://dl.acm.org/doi/10.5555/3666122.3666859">Flow matching for scalable simulation-based inference</a>. <em>Proceedings of the 37th international conference on neural information processing systems</em>. Curran Associates Inc.
+</div>
+<div id="ref-yang2026priorguide" class="csl-entry" role="listitem">
+Yang, Rissanen, Chang, Loka, Huang, Solin, Heinonen, and Acerbi (2026). <a href="https://openreview.net/forum?id=G4I23g5Ugh">PriorGuide: Test-time prior adaptation for simulation-based inference</a>. <em>The fourteenth international conference on learning representations</em>.
+</div>
+<div id="ref-yao2023discriminative" class="csl-entry" role="listitem">
+Yao and Domke (2023). <a href="https://dl.acm.org/doi/abs/10.5555/3666122.3667688">Discriminative calibration: Check <span>B</span>ayesian computation from simulations and flexible classifier</a>. <em>Proceedings of the 37th international conference on neural information processing systems</em>. Curran Associates Inc.
+</div>
+<div id="ref-zaheer2017deep" class="csl-entry" role="listitem">
+Zaheer, Kottur, Ravanbhakhsh, Póczos, Salakhutdinov, and Smola (2017). <a href="https://dl.acm.org/doi/10.5555/3294996.3295098">Deep sets</a>. <em>Proceedings of the 31st international conference on neural information processing systems</em>, 3394–3404. Curran Associates Inc.
+</div>
+</div>
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="material/UNI_Bonn_Logo_Standard_.jpg" class="slide-logo"></p>
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="presentation_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="presentation_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="presentation_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="presentation_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="presentation_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="presentation_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="presentation_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="presentation_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="presentation_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': true,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
