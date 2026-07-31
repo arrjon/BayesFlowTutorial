@@ -245,6 +245,13 @@ Jonas Arruda<br>University of Bonn
 
   <p class="date">2026-08-06</p>
 </section>
+<section id="warm-up-poll" class="slide level2" data-background-color="#fcba00">
+<h2>Warm-Up Poll</h2>
+<div class="poll-embed">
+<iframe src="https://wall.sli.do/event/w2t8HrKer4May9M26mADCT?section=9adab690-fd83-4411-863b-debe7f0798f2" height="100%" width="100%" frameborder="0" style="min-height: 560px;" allow="clipboard-write" title="Slido">
+</iframe>
+</div>
+</section>
 <section id="overview" class="slide level2">
 <h2>Overview</h2>
 <p><strong>Plan:</strong> Lecture mixed with exercises.</p>
@@ -286,14 +293,14 @@ Jonas Arruda<br>University of Bonn
 \mathbf{y} = \operatorname{Sim}(\boldsymbol{\theta}, \mathbf{u}),\quad \mathbf{u}\sim\text{RNG}(\cdot)
 </span></p>
 
-<img data-src="material/stefan_forward-process.png" alt="SBI forward process: prior to observables" class="r-stretch"><p>Parameters and data are drawn from the joint <span class="math inline">\boldsymbol{\theta}, \mathbf{y} \sim p(\boldsymbol{\theta}, \mathbf{y})</span>, and that joint is our <strong>Bayesian model</strong>.</p>
+<img data-src="media/images/stefan_forward-process.png" alt="SBI forward process: prior to observables" class="r-stretch"><p>Parameters and data are drawn from the joint <span class="math inline">\boldsymbol{\theta}, \mathbf{y} \sim p(\boldsymbol{\theta}, \mathbf{y})</span>, and that joint is our <strong>Bayesian model</strong>.</p>
 <p><em>Figure: S. Radev, BayesFlow.</em></p>
 </section>
 <section id="forward-and-inverse" class="slide level2">
 <h2>Forward and Inverse</h2>
 <p>Running the simulator forward can be slow, but it is usually possible. What we actually want is the <strong>inverse process</strong>, the posterior <span class="math inline">p(\boldsymbol{\theta} \mid \mathbf{y}_{\text{obs}})</span>:</p>
 
-<img data-src="material/stefan_inverse-process.png" alt="SBI forward and inverse process" class="r-stretch"><div class="fragment">
+<img data-src="media/images/stefan_inverse-process.png" alt="SBI forward and inverse process" class="r-stretch"><div class="fragment">
 <div class="columns">
 <div class="column" style="width:49%;">
 <p><strong>Likelihood-based (explicit)</strong></p>
@@ -323,7 +330,7 @@ Jonas Arruda<br>University of Bonn
 <li><strong>Challenge:</strong> different angles give the same <span class="math inline">\mathbf{y}</span>, so the posterior is <strong>multimodal</strong>.</li>
 </ul>
 </div><div class="column" style="width:55%;">
-<p><img data-src="material/simple%20example.png" alt="Simple Example"></p>
+<p><img data-src="media/images/simple%20example.png" alt="Simple Example"></p>
 </div></div>
 <p>We will return to this example in Part 3.</p>
 </section>
@@ -520,7 +527,7 @@ p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
 </span></p>
 <p><strong>Summary:</strong> a <em>set of sets</em>. Encode each group, then aggregate across groups with a permutation-invariant network.</p>
 </div><div class="column" style="width:45%;">
-<p><img data-src="material/bayesian-models-2-color%20small.png" alt="Hierarchical Bayesian model"></p>
+<p><img data-src="media/images/bayesian-models-2-color%20small.png" alt="Hierarchical Bayesian model"></p>
 </div></div>
 <div class="fragment">
 <p><strong>Bottleneck:</strong> naive amortization needs many simulator calls <em>per group</em>, so the budget grows with <span class="math inline">R</span>. Part 3 comes back to this.</p>
@@ -529,15 +536,15 @@ p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
 <section id="bayesflow-train-your-own-approximator" class="slide level2">
 <h2>BayesFlow: Train Your Own Approximator</h2>
 
-<img data-src="material/bf_landing_light.png" alt="BayesFlow landing" class="r-stretch"><p>An open-source library for the full amortized Bayesian workflow: <em><a href="https://bayesflow.org">bayesflow.org</a></em></p>
+<img data-src="media/images/bf_landing_light.png" alt="BayesFlow landing" class="r-stretch"><p>An open-source library for the full amortized Bayesian workflow: <em><a href="https://bayesflow.org">bayesflow.org</a></em></p>
 </section>
 <section id="the-amortized-workflow" class="slide level2">
 <h2>The Amortized Workflow</h2>
 <div class="r-stack">
-<p><img data-src="material/workflow-1.png" alt="Workflow: simulator"></p>
-<p><img data-src="material/workflow-2.png" class="fragment" data-fragment-index="1" alt="Workflow: adapter"></p>
-<p><img data-src="material/workflow-3.png" class="fragment" data-fragment-index="2" alt="Workflow: networks"></p>
-<p><img data-src="material/workflow-4.png" class="fragment" data-fragment-index="3" alt="Workflow: full pipeline with diagnostics"></p>
+<p><img data-src="media/images/workflow-1.png" alt="Workflow: simulator"></p>
+<p><img data-src="media/images/workflow-2.png" class="fragment" data-fragment-index="1" alt="Workflow: adapter"></p>
+<p><img data-src="media/images/workflow-3.png" class="fragment" data-fragment-index="2" alt="Workflow: networks"></p>
+<p><img data-src="media/images/workflow-4.png" class="fragment" data-fragment-index="3" alt="Workflow: full pipeline with diagnostics"></p>
 </div>
 <p>Build it up: <strong>simulate</strong> → <strong>adapt</strong> → train the <strong>neural approximator</strong> (summary + inference net) → <strong>diagnostics</strong>. <em>Figure: S. Radev, BayesFlow.</em></p>
 </section>
@@ -589,7 +596,7 @@ p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
 <li>Then time inference on 500 further datasets, without retraining.</li>
 </ul>
 <div class="qr-center">
-<p><img data-src="material/exercise_01.png" alt="QR code for exercise 1"></p>
+<p><img data-src="media/images/exercise_01.png" alt="QR code for exercise 1"></p>
 <p><strong><a href="https://colab.research.google.com/github/arrjon/BayesFlowTutorial/blob/main/01_Linear_Regression_Exercise.ipynb" target="_blank" data-preview-link="false">▶ Open in Colab 01_Linear_Regression at https://shorturl.at/dx6PM</a></strong></p>
 </div>
 </section></section>
@@ -638,7 +645,7 @@ p_{\text{SBC}}(\mathbf{y},\boldsymbol{\theta},\tilde{\boldsymbol{\theta}})
 <section id="empirical-cumulative-distribution-functions-as-a-diagnostic-tool" class="slide level2">
 <h2>Empirical Cumulative Distribution Functions as a Diagnostic Tool</h2>
 
-<img data-src="material/ecdf_diff.png" alt="SBC ECDF difference plot" class="r-stretch"><p>Plot the <strong>ECDF of ranks minus uniform</strong>, with simultaneous confidence bands. Inside the band → calibrated. <em>Image: <a href="https://hyunjimoon.github.io/SBC/articles/rank_visualizations.html">Martin Modrák</a>.</em></p>
+<img data-src="media/images/ecdf_diff.png" alt="SBC ECDF difference plot" class="r-stretch"><p>Plot the <strong>ECDF of ranks minus uniform</strong>, with simultaneous confidence bands. Inside the band → calibrated. <em>Image: <a href="https://hyunjimoon.github.io/SBC/articles/rank_visualizations.html">Martin Modrák</a>.</em></p>
 </section>
 <section id="sbc-in-practice-bayesflow" class="slide level2">
 <h2>SBC in Practice (BayesFlow)</h2>
@@ -721,7 +728,7 @@ p_{\text{ppc}} = \Pr\{T(\mathbf{y}^\ast)\ge T(\mathbf{y}_{\text{obs}})\mid\mathb
 <li>Then confront the network with <strong>real COVID-19 data</strong> and judge model adequacy.</li>
 </ul>
 <div class="qr-center">
-<p><img data-src="material/exercise_02.png" alt="QR code for exercise 2"></p>
+<p><img data-src="media/images/exercise_02.png" alt="QR code for exercise 2"></p>
 <p><strong><a href="https://colab.research.google.com/github/arrjon/BayesFlowTutorial/blob/main/02_SIR_Diagnostics_Exercise.ipynb" target="_blank" data-preview-link="false">▶ Open in Colab 02_SIR_Diagnostics at https://shorturl.at/7VdI6</a></strong></p>
 </div>
 </section></section>
@@ -775,12 +782,12 @@ p_{\text{ppc}} = \Pr\{T(\mathbf{y}^\ast)\ge T(\mathbf{y}_{\text{obs}})\mid\mathb
 <section id="benchmarking-diffusion-models" class="slide level2">
 <h2>Benchmarking Diffusion Models</h2>
 
-<img data-src="material/c2st_benchmark_boxplot_best.png" alt="Diffusion model benchmark" class="r-stretch"><p>C2ST across ten benchmark tasks, so lower is better and <span class="math inline">0.5</span> means indistinguishable from the reference posterior. The dashed line is the normalizing flow baseline of Lueckmann et al. <span class="citation" data-cites="arruda2025diffusion">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Arruda et al., 2025</a>)</span></p>
+<img data-src="media/images/c2st_benchmark_boxplot_best.png" alt="Diffusion model benchmark" class="r-stretch"><p>C2ST across ten benchmark tasks, so lower is better and <span class="math inline">0.5</span> means indistinguishable from the reference posterior. The dashed line is the normalizing flow baseline of Lueckmann et al. <span class="citation" data-cites="arruda2025diffusion">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Arruda et al., 2025</a>)</span></p>
 </section>
 <section id="diffusion-models" class="slide level2">
 <h2>Diffusion Models</h2>
 
-<img data-src="material/diffusion_model_review.png" alt="Diffusion model overview: forward/backward process, training and inference" class="r-stretch"><p>Forward noising (<span class="math inline">\mathbf{z}_t=\alpha_t\mathbf{z}_0+\sigma_t\epsilon</span>) → train the network on <span class="math inline">\omega_t L_t(\hat{\mathbf{z}},\mathbf{z})</span> → backward via an <strong>ODE/SDE solver</strong> <span class="citation" data-cites="arruda2025diffusion">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Arruda et al., 2025</a>)</span>.</p>
+<img data-src="media/images/diffusion_model_review.png" alt="Diffusion model overview: forward/backward process, training and inference" class="r-stretch"><p>Forward noising (<span class="math inline">\mathbf{z}_t=\alpha_t\mathbf{z}_0+\sigma_t\epsilon</span>) → train the network on <span class="math inline">\omega_t L_t(\hat{\mathbf{z}},\mathbf{z})</span> → backward via an <strong>ODE/SDE solver</strong> <span class="citation" data-cites="arruda2025diffusion">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Arruda et al., 2025</a>)</span>.</p>
 </section>
 <section id="diffusion-the-forward-process" class="slide level2">
 <h2>Diffusion: The Forward Process</h2>
@@ -890,13 +897,13 @@ c(\mathbf{z}_t,\mathbf{y},t) = c(\mathbf{z}_{t'},\mathbf{y},t'),\qquad c(\mathbf
 <section id="the-diffusion-model-family" class="slide level2">
 <h2>The Diffusion Model Family</h2>
 
-<img data-src="material/fm_cm_visual.png" alt="Diffusion, flow matching, and consistency models" class="r-stretch"><p>Diffusion model (stochastic) · flow matching (deterministic ODE) · consistency model (direct jump).</p>
+<img data-src="media/images/fm_cm_visual.png" alt="Diffusion, flow matching, and consistency models" class="r-stretch"><p>Diffusion model (stochastic) · flow matching (deterministic ODE) · consistency model (direct jump).</p>
 </section>
 <section id="post-hoc-guidance" class="slide level2">
 <h2>Post-Hoc Guidance</h2>
 <p>This is what the free-form architecture bought us. The score is <strong>additive</strong>, so sampling can be steered after training by adding a gradient term.</p>
 
-<img data-src="material/adaptive_inference.png" alt="Post-hoc guidance" class="r-stretch"><p><span class="math display">
+<img data-src="media/images/adaptive_inference.png" alt="Post-hoc guidance" class="r-stretch"><p><span class="math display">
 \nabla_{\boldsymbol{\theta}_t}\log p(\boldsymbol{\theta}_t\mid\text{extra}) \approx \hat{s}(\boldsymbol{\theta}_t,\mathbf{y},t) + \nabla_{\boldsymbol{\theta}_t}\log g(\boldsymbol{\theta}_t)
 </span></p>
 <p>Impose constraints, change the prior, or compose models without retraining <span class="citation" data-cites="bansal2023universal yang2026priorguide">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Bansal et al., 2023</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Yang et al., 2026</a>)</span>.</p>
@@ -928,7 +935,7 @@ p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
 </span></p>
 <p><strong>Bottleneck:</strong> simulation of a single observation is a <em>set of sets</em>.</p>
 </div><div class="column" style="width:45%;">
-<p><img data-src="material/bayesian-models-2-color%20small.png" alt="Hierarchical Bayesian model"></p>
+<p><img data-src="media/images/bayesian-models-2-color%20small.png" alt="Hierarchical Bayesian model"></p>
 </div></div>
 </section>
 <section id="compositional-hierarchical-inference" class="slide level2">
@@ -944,7 +951,7 @@ p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
 <h2>Revisiting the Robot Arm</h2>
 <p>Back to the toy example from Part 1. A diffusion model with a plain MLP score net recovers the multimodal, non-identifiable geometry:</p>
 
-<img data-src="material/simple%20example%20result.png" alt="Diffusion posterior on robot arm" class="r-stretch"></section>
+<img data-src="media/images/simple%20example%20result.png" alt="Diffusion posterior on robot arm" class="r-stretch"></section>
 <section id="exercise-3" class="slide level2" data-background-color="#fcba00">
 <h2>Exercise 3</h2>
 <p><strong>Diffusion Models &amp; Custom Guidance</strong></p>
@@ -954,7 +961,7 @@ p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
 <li><strong>Write your own guidance constraint</strong> and steer sampling after training via <code>guidance_kwargs</code>.</li>
 </ul>
 <div class="qr-center">
-<p><img data-src="material/exercise_03.png" alt="QR code for exercise 3"></p>
+<p><img data-src="media/images/exercise_03.png" alt="QR code for exercise 3"></p>
 <p><strong><a href="https://colab.research.google.com/github/arrjon/BayesFlowTutorial/blob/main/03_Diffusion_Guidance_Exercise.ipynb" target="_blank" data-preview-link="false">▶ Open in Colab 03_Diffusion_Guidance at https://shorturl.at/jTU9J</a></strong></p>
 </div>
 </section>
@@ -985,16 +992,16 @@ p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
 <div class="qr-center">
 <div class="columns" style="align-items:center;justify-content:center;">
 <div class="column" style="width:60%;">
-<p><img data-src="material/ddm_paper.png" class="paper-img" alt="Review Paper Title"></p>
+<p><img data-src="media/images/ddm_paper.png" class="paper-img" alt="Review Paper Title"></p>
 </div><div class="column" style="width:40%;">
-<p><img data-src="material/qrcode.png" alt="QR code for tutorial review paper"></p>
+<p><img data-src="media/images/qrcode.png" alt="QR code for tutorial review paper"></p>
 </div></div>
 <p><strong>Tutorial review paper</strong>: 50+ SBI &amp; diffusion models papers, benchmarks, and discussion of design choices.</p>
 <p><strong><a href="https://github.com/arrjon/BayesFlowTutorial" target="_blank" data-preview-link="false">▶ Tutorial with Solutions: https://github.com/arrjon/BayesFlowTutorial</a></strong></p>
 <p>jonas.arruda@uni-bonn.de</p>
 </div>
 <div class="logo-row">
-<p><img data-src="material/UNI_Bonn_Logo_Standard_.jpg" alt="University of Bonn logo"> <img data-src="material/BIGS-Logo.png" alt="BIGS logo"> <img data-src="material/bcml.webp" alt="BCML logo"></p>
+<p><img data-src="media/images/UNI_Bonn_Logo_Standard_.jpg" alt="University of Bonn logo"> <img data-src="media/images/BIGS-Logo.png" alt="BIGS logo"> <img data-src="media/images/bcml.webp" alt="BCML logo"></p>
 </div>
 </div>
 
