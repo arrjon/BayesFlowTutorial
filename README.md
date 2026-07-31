@@ -1,9 +1,11 @@
 # BayesFlow Tutorial — Hands-on Exercises
 
 A three-part introduction to **amortized Bayesian inference** with
-[BayesFlow](https://bayesflow.org). Each part consists of an **exercise** notebook (with `TODO`
-gaps to fill in) and a matching **solution** notebook. All notebooks are designed to run on
-**Google Colab**.
+[BayesFlow](https://bayesflow.org). Each part consists of a brief theoretical introduction,
+an **exercise** notebook and a matching **solution** notebook. 
+All notebooks are designed to run on  **Google Colab**.
+
+**Lecture slides: <https://arrjon.github.io/BayesFlowTutorial/>**
 
 > The goal: by the end you understand how to do the Bayesian workflow with BayesFlow: how
 > *simulator → adapter → networks → workflow → diagnostics* fits together, and how to push it
