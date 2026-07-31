@@ -118,7 +118,7 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="presentation_files/libs/revealjs/dist/theme/quarto-62803eae62b78208554a5134fec59b11.css">
+  <link rel="stylesheet" href="presentation_files/libs/revealjs/dist/theme/quarto-be24d7a2a485a878155731f5bd816f1c.css">
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
@@ -245,8 +245,8 @@ Jonas Arruda<br>University of Bonn
 
   <p class="date">2026-08-06</p>
 </section>
-<section id="warm-up-poll" class="slide level2" data-background-color="#fcba00">
-<h2>Warm-Up Poll</h2>
+<section id="warm-up" class="slide level2" data-background-color="#fcba00">
+<h2>Warm-Up</h2>
 <div class="poll-embed">
 <iframe src="https://wall.sli.do/event/w2t8HrKer4May9M26mADCT?section=9adab690-fd83-4411-863b-debe7f0798f2" height="100%" width="100%" frameborder="0" style="min-height: 560px;" allow="clipboard-write" title="Slido">
 </iframe>
@@ -254,7 +254,6 @@ Jonas Arruda<br>University of Bonn
 </section>
 <section id="overview" class="slide level2">
 <h2>Overview</h2>
-<p><strong>Plan:</strong> Lecture mixed with exercises.</p>
 <div class="fragment">
 <ol type="1">
 <li><p><strong>What is SBI?</strong> Introduction, Bayesian model types, normalizing flows.</p>
@@ -263,13 +262,13 @@ Jonas Arruda<br>University of Bonn
 </div>
 <div class="fragment">
 <ol start="2" type="1">
-<li><p><strong>Does it work?</strong> Calibration checking and model misspecification.</p>
+<li><p><strong>Did it work?</strong> Calibration checking, model misspecification.</p>
 <p>→ <em>Exercise 2: diagnostics on an epidemic time-series model.</em></p></li>
 </ol>
 </div>
 <div class="fragment">
 <ol start="3" type="1">
-<li><p><strong>Modern generative models:</strong> diffusion models, flow matching, consistency models.</p>
+<li><p><strong>How to leverage modern generative models?</strong> Diffusion models, flow matching, consistency models.</p>
 <p>→ <em>Exercise 3: diffusion models with post-hoc guidance.</em></p></li>
 </ol>
 </div>
@@ -283,22 +282,25 @@ Jonas Arruda<br>University of Bonn
 <h2>Learning Densities</h2>
 <video src="media/videos/manim_diffusion/1080p60/ReverseODE.mp4" data-autoplay="" autoplay="" loop="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
 </video>
-<p>Everything today does one thing: transport a Gaussian onto our target, here a checkerboard.</p>
+<p>Everything today is about transporting a Gaussian onto our target, here a checkerboard.</p>
 </section>
 <section id="everything-starts-with-a-simulator" class="slide level2">
 <h2>Everything Starts with a Simulator</h2>
-<p>We start from two objects we can sample: a <strong>prior</strong> and a scientific <strong>simulator</strong>. Together they define the <em>forward process</em> from unknown parameters <span class="math inline">\boldsymbol{\theta}</span> to observables <span class="math inline">\mathbf{y}</span>:</p>
+<p>A <strong>prior</strong> and a scientific <strong>simulator</strong> together define the <em>forward process</em> from unknown parameters <span class="math inline">\boldsymbol{\theta}</span> to observables <span class="math inline">\mathbf{y}</span>:</p>
 <p><span class="math display">
 \boldsymbol{\theta} \sim p(\boldsymbol{\theta}), \qquad
 \mathbf{y} = \operatorname{Sim}(\boldsymbol{\theta}, \mathbf{u}),\quad \mathbf{u}\sim\text{RNG}(\cdot)
 </span></p>
 
-<img data-src="media/images/stefan_forward-process.png" alt="SBI forward process: prior to observables" class="r-stretch"><p>Parameters and data are drawn from the joint <span class="math inline">\boldsymbol{\theta}, \mathbf{y} \sim p(\boldsymbol{\theta}, \mathbf{y})</span>, and that joint is our <strong>Bayesian model</strong>.</p>
+<img data-src="media/images/stefan_forward-process.png" alt="SBI forward process: prior to observables" class="r-stretch"><p>Parameters and data are drawn from the joint <span class="math inline">\boldsymbol{\theta}, \mathbf{y} \sim p(\boldsymbol{\theta}, \mathbf{y})</span>: our <strong>Bayesian model</strong>.</p>
 <p><em>Figure: S. Radev, BayesFlow.</em></p>
 </section>
 <section id="forward-and-inverse" class="slide level2">
 <h2>Forward and Inverse</h2>
-<p>Running the simulator forward can be slow, but it is usually possible. What we actually want is the <strong>inverse process</strong>, the posterior <span class="math inline">p(\boldsymbol{\theta} \mid \mathbf{y}_{\text{obs}})</span>:</p>
+<ul>
+<li>Running the simulator forward can be slow, but it is usually possible.</li>
+<li>What we actually want is the <strong>inverse process</strong>, the posterior <span class="math inline">p(\boldsymbol{\theta} \mid \mathbf{y}_{\text{obs}})</span>:</li>
+</ul>
 
 <img data-src="media/images/stefan_inverse-process.png" alt="SBI forward and inverse process" class="r-stretch"><div class="fragment">
 <div class="columns">
@@ -327,7 +329,7 @@ Jonas Arruda<br>University of Bonn
 <li><strong>Parameters</strong> (not observed): <span class="math display">\boldsymbol{\theta}=(h,\alpha_1,\alpha_2,\alpha_3)</span></li>
 <li><strong>Observation:</strong> end position <span class="math inline">\mathbf{y} = M(\boldsymbol{\theta})</span>.</li>
 <li><strong>Task:</strong> recover <span class="math inline">p(\boldsymbol{\theta}\mid \mathbf{y})</span>.</li>
-<li><strong>Challenge:</strong> different angles give the same <span class="math inline">\mathbf{y}</span>, so the posterior is <strong>multimodal</strong>.</li>
+<li><strong>Challenge:</strong> different angles give the same observation <span class="math inline">\mathbf{y}</span>, so the posterior is <strong>multimodal</strong>.</li>
 </ul>
 </div><div class="column" style="width:55%;">
 <p><img data-src="media/images/simple%20example.png" alt="Simple Example"></p>
@@ -336,65 +338,78 @@ Jonas Arruda<br>University of Bonn
 </section>
 <section id="amortized-neural-posterior-estimation" class="slide level2">
 <h2>Amortized Neural Posterior Estimation</h2>
-<p>Train a conditional density estimator <span class="math inline">q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})</span> on simulations <span class="math inline">(\boldsymbol{\theta}, \mathbf{y})</span> using</p>
+<p>Train a conditional density estimator <span class="math inline">q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})</span> on simulations <span class="math inline">(\boldsymbol{\theta}, \mathbf{y})</span> using the <strong>forward KL</strong></p>
 <p><span class="math display">
 \mathbb{E}_{p(\mathbf{y})}\big[\operatorname{KL}\!\big(p(\boldsymbol{\theta}\mid\mathbf{y})\,\Vert\, q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})\big)\big]
 </span></p>
-<p>This is the <strong>forward KL</strong> to the true posterior, averaged over the marginal data distribution. The unique minimizer is the true posterior <span class="math inline">q_{\boldsymbol{\phi}} = p(\boldsymbol{\theta}\mid\mathbf{y})</span>.</p>
+<ul>
+<li>The unique minimizer is the true posterior <span class="math inline">q_{\boldsymbol{\phi}} = p(\boldsymbol{\theta}\mid\mathbf{y})</span>.</li>
+</ul>
 <div class="fragment">
-<p><span class="math display">
+<ul>
+<li>We can simplify this to: <span class="math display">
 \begin{align*}
 \mathbb{E}_{p(\mathbf{y})}\!\left[
-        \operatorname{KL}(p(\boldsymbol{\theta} \mid \mathbf{y}) \Vert q_{\phi}(\boldsymbol{\theta} \mid \mathbf{y}))
-       \right] \notag
-    &amp;=\mathbb{E}_{p(\mathbf{y})}\mathbb{E}_{p(\boldsymbol{\theta} \mid \mathbf{y})}\!\left[
-        \log p(\boldsymbol{\theta} \mid \mathbf{y}) - \log q_{\phi}(\boldsymbol{\theta} \mid \mathbf{y})
-       \right] \notag \\
-    &amp;=\mathbb{E}_{(\boldsymbol{\theta},\mathbf{y})}\!\left[
-        \log p(\boldsymbol{\theta} \mid \mathbf{y}) - \log q_{\phi}(\boldsymbol{\theta} \mid \mathbf{y})
-       \right] \notag \\
-    &amp;=\mathbb{E}_{(\boldsymbol{\theta},\mathbf{y})}\!\left[
-        \log p(\boldsymbol{\theta} \mid \mathbf{y})\right]
-       -\mathbb{E}_{(\boldsymbol{\theta},\mathbf{y})}\!\left[
-        \log q_{\phi}(\boldsymbol{\theta} \mid \mathbf{y})
-       \right].
+      \operatorname{KL}(p(\boldsymbol{\theta} \mid \mathbf{y}) \Vert q_{\phi}(\boldsymbol{\theta} \mid \mathbf{y}))
+     \right] \notag
+  &amp;=\mathbb{E}_{p(\mathbf{y})}\mathbb{E}_{p(\boldsymbol{\theta} \mid \mathbf{y})}\!\left[
+      \log p(\boldsymbol{\theta} \mid \mathbf{y}) - \log q_{\phi}(\boldsymbol{\theta} \mid \mathbf{y})
+     \right] \notag \\
+  &amp;=\mathbb{E}_{(\boldsymbol{\theta},\mathbf{y})}\!\left[
+      \log p(\boldsymbol{\theta} \mid \mathbf{y}) - \log q_{\phi}(\boldsymbol{\theta} \mid \mathbf{y})
+     \right] \notag \\
+  &amp;=\mathbb{E}_{(\boldsymbol{\theta},\mathbf{y})}\!\left[
+      \log p(\boldsymbol{\theta} \mid \mathbf{y})\right]
+     -\mathbb{E}_{(\boldsymbol{\theta},\mathbf{y})}\!\left[
+      \log q_{\phi}(\boldsymbol{\theta} \mid \mathbf{y})
+     \right].
 \end{align*}
-</span></p>
+</span></li>
+</ul>
 </div>
 <div class="fragment">
-<p>Optimizing allows us to drop the true posterior as it does not depend on <span class="math inline">\boldsymbol{\phi}</span>: <span class="math display">
+<ul>
+<li>Minimizing allows us to drop the true posterior as it does not depend on <span class="math inline">\boldsymbol{\phi}</span>: <span class="math display">
 \boldsymbol{\phi}^* = \arg\min_{\boldsymbol{\phi}}\;
 \mathbb{E}_{(\boldsymbol{\theta},\mathbf{y})\sim p(\boldsymbol{\theta},\mathbf{y})}\big[-\log q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})\big]
-</span></p>
+</span></li>
+</ul>
 </div>
 <div class="fragment">
-<p><strong>Amortization:</strong> pay the training cost once; inference on a new <span class="math inline">\mathbf{y}_{\text{obs}}</span> is then a single evaluation of <span class="math inline">q_{\boldsymbol{\phi}}</span>.</p>
+<p><strong>Amortization</strong> means, we pay the training cost once and at inference on a new <span class="math inline">\mathbf{y}_{\text{obs}}</span> we only need a single evaluation of <span class="math inline">q_{\boldsymbol{\phi}}</span>.</p>
 </div>
 </section>
-<section id="the-density-estimator-normalizing-flows" class="slide level2">
-<h2>The Density Estimator: Normalizing Flows</h2>
-<p>How do we represent a flexible <span class="math inline">q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})</span> that we can both <strong>sample</strong> and <strong>evaluate</strong>?</p>
-<p>With a neural network, but an invertible one!</p>
+<section id="normalizing-flows-as-density-estimators" class="slide level2">
+<h2>Normalizing Flows as Density Estimators</h2>
+<ul>
+<li>How do we represent a flexible <span class="math inline">q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})</span> that we can both <strong>sample</strong> and <strong>evaluate</strong>?</li>
+</ul>
+<p>→ With a neural network, but an invertible one!</p>
 <div class="fragment">
-<p>A <strong>normalizing flow</strong> transports a simple base <span class="math inline">p(\mathbf{z})=\mathcal{N}(\mathbf{0},\mathbf{I})</span> through a learned bijection <span class="math inline">f_{\boldsymbol{\phi}}(\cdot;\mathbf{y})</span> <span class="citation" data-cites="rezende2015variational papamakarios2021normalizing">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Papamakarios et al., 2021</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Rezende and Mohamed, 2015</a>)</span>: <span class="math display">
+<ul>
+<li>A <strong>normalizing flow</strong> transports a simple base <span class="math inline">p(\mathbf{z})=\mathcal{N}(\mathbf{0},\mathbf{I})</span> through a learned bijection <span class="math inline">f_{\boldsymbol{\phi}}(\cdot;\mathbf{y})</span> <span class="citation" data-cites="rezende2015variational papamakarios2021normalizing">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Papamakarios et al., 2021</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Rezende and Mohamed, 2015</a>)</span>: <span class="math display">
 \boldsymbol{\theta} = f_{\boldsymbol{\phi}}^{-1}(\mathbf{z};\mathbf{y}),\qquad \mathbf{z}\sim\mathcal{N}(\mathbf{0},\mathbf{I})
-</span></p>
+</span></li>
+</ul>
 </div>
 <div class="fragment">
-<p><strong>Change of variables</strong> gives a tractable density: <span class="math display">
+<ul>
+<li><p><strong>Change of variables</strong> gives a tractable density: <span class="math display">
 q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})
 = p\big(f_{\boldsymbol{\phi}}(\boldsymbol{\theta};\mathbf{y})\big)\,
 \big|\det J_{f_{\boldsymbol{\phi}}}(\boldsymbol{\theta};\mathbf{y})\big|
-</span></p>
-<ul>
-<li>Plug into the NPE loss → maximize the exact log-likelihood of the flow.</li>
-<li>The price: the network must be <strong>invertible</strong>, and we must be able to compute <span class="math inline">\det J</span>.</li>
+</span></p></li>
+<li><p>Forward KL means minimize the log-likelihood of the flow.</p></li>
+<li><p>The neural network must be <strong>invertible</strong>, and we must be able to compute <span class="math inline">\det J</span>.</p></li>
 </ul>
 </div>
 </section>
-<section id="making-flows-cheap-coupling-layers" class="slide level2">
-<h2>Making Flows Cheap: Coupling Layers</h2>
-<p>That computational costs sits in the log-determinant: <span class="math inline">\mathcal{O}(d^3)</span> in general, but only <span class="math inline">\mathcal{O}(d)</span> if the Jacobian is <strong>triangular</strong>.</p>
+<section id="making-flows-cheap-with-coupling-layers" class="slide level2">
+<h2>Making Flows Cheap with Coupling Layers</h2>
+<ul>
+<li>Computation of log-determinant costs <span class="math inline">\mathcal{O}(d^3)</span> in general</li>
+<li>But only <span class="math inline">\mathcal{O}(d)</span> if the Jacobian is <strong>triangular</strong>.</li>
+</ul>
 <div class="fragment">
 <p><strong>Coupling flow</strong> <span class="citation" data-cites="dinh2017density">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Dinh et al., 2017</a>)</span>: split <span class="math inline">\boldsymbol{\theta}=(\boldsymbol{\theta}^A,\boldsymbol{\theta}^B)</span>, transform one block conditioned on the other: <span class="math display">
 \mathbf{z}^A = f(\boldsymbol{\theta}, \mathbf{y}) = \boldsymbol{\theta}^A \odot \exp\!\big(s(\boldsymbol{\theta}^B,\mathbf{y})\big) + t(\boldsymbol{\theta}^B,\mathbf{y}),
@@ -413,11 +428,11 @@ q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})
 </div>
 <div class="fragment">
 <ul>
-<li><span class="math inline">s, t</span> are arbitrary neural nets (they need <strong>not</strong> be invertible).</li>
+<li><span class="math inline">s, t</span> are <strong>arbitrary neural nets</strong> (they need not be invertible).</li>
 <li>The log-determinant is <span class="math inline">\sum s(\cdot)</span>, and the inverse costs the same as the forward.</li>
 <li>Stack many layers <span class="math inline">f=f^1 \circ \cdots \circ f^L</span>, alternating which block is transformed.</li>
-<li><strong>Spline</strong> couplings <span class="citation" data-cites="durkan2019neural">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Durkan et al., 2019</a>)</span> add local flexibility compared to affine layers.</li>
-<li>Stacked coupling blocks are <strong>universal</strong> density approximators for sufficiently regular densities <span class="citation" data-cites="draxler2024universality">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Draxler et al., 2024</a>)</span>.</li>
+<li><strong>Spline flows</strong> <span class="citation" data-cites="durkan2019neural">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Durkan et al., 2019</a>)</span> use a more flexible transformation than affine layers.</li>
+<li>Stacked coupling blocks are <strong>universal density approximators</strong> for sufficiently regular densities <span class="citation" data-cites="draxler2024universality">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Draxler et al., 2024</a>)</span>.</li>
 </ul>
 </div>
 </section>
@@ -425,23 +440,30 @@ q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})
 <h2>Normalizing Flows on a Checkerboard</h2>
 <video src="media/videos/manim_diffusion/1080p60/NFLayers.mp4" data-autoplay="" autoplay="" loop="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
 </video>
-<p>Each coupling layer applies one invertible step; the composition carries the Gaussian onto the checkerboard.</p>
+<p>Each coupling layer applies one invertible step.</p>
 </section>
-<section id="two-networks-summary-inference" class="slide level2">
-<h2>Two Networks: Summary + Inference</h2>
-<p>Raw data is rarely a fixed-size vector. A summary network compresses it first, and both networks are trained <strong>jointly</strong>, end to end:</p>
+<section id="summary-inference-networks" class="slide level2">
+<h2>Summary &amp; Inference Networks</h2>
+<ul>
+<li>Raw data is rarely a fixed-size vector.</li>
+<li>A summary network compresses it first, and both networks can be trained <strong>jointly</strong>:</li>
+</ul>
 <p><span class="math display">
 \boldsymbol{\theta}\sim q_{\boldsymbol{\phi}}\big(\boldsymbol{\theta}\mid \underbrace{s(\mathbf{y})}_{\text{summary}}\big)
 </span></p>
 <ul>
 <li><strong>Summary network</strong> <span class="math inline">s</span>: compresses raw data <span class="math inline">\mathbf{y}</span> (set, series, hierarchy) into a fixed-size vector, using the inductive bias that matches the data.</li>
-<li><strong>Inference network</strong> <span class="math inline">q_{\boldsymbol{\phi}}</span>: the conditional flow over parameters, taking <span class="math inline">s(\mathbf{y})</span> as its condition.</li>
+<li><strong>Inference network</strong> <span class="math inline">q_{\boldsymbol{\phi}}</span>: the conditional network over parameters, taking <span class="math inline">s(\mathbf{y})</span> as its condition.</li>
 </ul>
 <div class="fragment">
-<p>Ideal case: <span class="math inline">s</span> is a <strong>sufficient statistic</strong> for <span class="math inline">\boldsymbol{\theta}</span>. In practice it is a <em>learned compression</em>, optimized for posterior inference <span class="citation" data-cites="radev2020bayesflow">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Radev et al., 2020</a>)</span>.</p>
+<ul>
+<li>Ideal case: <span class="math inline">s</span> is a <strong>sufficient statistic</strong> for <span class="math inline">\boldsymbol{\theta}</span>. In practice it is a <em>learned compression</em>, optimized for posterior inference <span class="citation" data-cites="radev2020bayesflow">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Radev et al., 2020</a>)</span>.</li>
+</ul>
 </div>
 <div class="fragment">
-<p>For plain vector data no summary network is needed: the flow conditions on <span class="math inline">\mathbf{y}</span> directly.</p>
+<ul>
+<li>For plain vector data no summary network is needed: the flow conditions on <span class="math inline">\mathbf{y}</span> directly.</li>
+</ul>
 </div>
 </section>
 <section id="what-structure-does-the-data-have" class="slide level2">
@@ -481,17 +503,23 @@ q_{\boldsymbol{\phi}}(\boldsymbol{\theta}\mid\mathbf{y})
 </section>
 <section id="model-type-1-exchangeable-data" class="slide level2">
 <h2>Model Type 1: Exchangeable Data</h2>
-<p><span class="math inline">N</span> i.i.d. observations: the posterior does <strong>not</strong> depend on ordering.</p>
+<ul>
+<li><span class="math inline">N</span> i.i.d. observations: the posterior does <strong>not</strong> depend on ordering. What about <strong>variable <span class="math inline">N</span></strong>?</li>
+</ul>
 <p><span class="math display">
 s(\mathbf{y}_{\pi(1)},\dots,\mathbf{y}_{\pi(N)}) = s(\mathbf{y}_1,\dots,\mathbf{y}_N)\quad\text{for all permutations }\pi
 </span></p>
 <div class="fragment">
-<p><strong>DeepSets</strong> <span class="citation" data-cites="zaheer2017deep">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Zaheer et al., 2017</a>)</span> enforce this by a <em>sum-decomposition</em>: <span class="math display">
+<ul>
+<li><strong>DeepSets</strong> <span class="citation" data-cites="zaheer2017deep">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Zaheer et al., 2017</a>)</span> enforce this by a <em>sum-decomposition</em>: <span class="math display">
 s(\mathbf{y}_1,\dots,\mathbf{y}_N) = \rho\Big(\textstyle\bigoplus_{i=1}^N \phi(\mathbf{y}_i)\Big)
-</span> embed each element with <span class="math inline">\phi</span>, pool with a symmetric aggregator (<span class="math inline">\sum</span>, mean, max), decode with <span class="math inline">\rho</span>.</p>
+</span> embed each element with <span class="math inline">\phi</span>, pool with a symmetric aggregator (<span class="math inline">\sum</span>, mean, max), decode with <span class="math inline">\rho</span>.</li>
+</ul>
 </div>
 <div class="fragment">
-<p><strong>Set Transformer</strong> <span class="citation" data-cites="lee2019set">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Lee et al., 2019</a>)</span>: attention lets each element’s representation depend on the whole set, which is more flexible but more expensive. Both architectures handle <strong>variable <span class="math inline">N</span></strong>.</p>
+<ul>
+<li><strong>Set Transformer</strong> <span class="citation" data-cites="lee2019set">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Lee et al., 2019</a>)</span>: attention lets each element’s representation depend on the whole set, which is more flexible but more expensive.</li>
+</ul>
 </div>
 </section>
 <section id="model-type-2-time-series" class="slide level2">
@@ -546,7 +574,8 @@ p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
 <p><img data-src="media/images/workflow-3.png" class="fragment" data-fragment-index="2" alt="Workflow: networks"></p>
 <p><img data-src="media/images/workflow-4.png" class="fragment" data-fragment-index="3" alt="Workflow: full pipeline with diagnostics"></p>
 </div>
-<p>Build it up: <strong>simulate</strong> → <strong>adapt</strong> → train the <strong>neural approximator</strong> (summary + inference net) → <strong>diagnostics</strong>. <em>Figure: S. Radev, BayesFlow.</em></p>
+<p><strong>Simulator</strong> → <strong>adapter</strong> → <strong>neural approximator</strong> (summary + inference net) → <strong>diagnostics</strong>.</p>
+<p><em>Figure: S. Radev, BayesFlow.</em></p>
 </section>
 <section id="code-a-basic-workflow" class="slide level2">
 <h2>Code: A Basic Workflow</h2>
@@ -569,7 +598,7 @@ p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
 <span id="cb1-17"><a href=""></a>    summary_network<span class="op">=</span><span class="va">None</span>,                           <span class="co"># vector data → none needed</span></span>
 <span id="cb1-18"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="fragment">
-<p><strong>Choosing a summary network:</strong> pass the one that matches the data type.</p>
+<p><strong>Choosing a summary network:</strong></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href=""></a>summary_network<span class="op">=</span>bf.networks.DeepSet()             <span class="co"># exchangeable set</span></span>
 <span id="cb2-2"><a href=""></a>summary_network<span class="op">=</span>bf.networks.TimeSeriesTransformer()  <span class="co"># time series</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -664,9 +693,13 @@ p_{\text{SBC}}(\mathbf{y},\boldsymbol{\theta},\tilde{\boldsymbol{\theta}})
 </section>
 <section id="a-caveat-marginal-sbc-is-necessary-not-sufficient" class="slide level2">
 <h2>A Caveat: Marginal SBC Is Necessary, Not Sufficient</h2>
-<p>Marginal rank checks can <strong>pass</strong> while the joint posterior is still wrong <span class="citation" data-cites="modrak2025simulation-based">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Modrák et al., 2025</a>)</span>.</p>
+<ul>
+<li>Marginal rank checks can <strong>pass</strong> while the joint posterior is still wrong <span class="citation" data-cites="modrak2025simulation-based">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Modrák et al., 2025</a>)</span>.</li>
+</ul>
 <div class="fragment">
-<p>An estimator that ignores informative parts of the data may still show uniform marginal ranks, because errors can cancel across marginals.</p>
+<ul>
+<li>An estimator that ignores informative parts of the data may still show uniform marginal ranks, because errors can cancel across marginals.</li>
+</ul>
 </div>
 <div class="fragment">
 <p><strong>Fix:</strong> use <em>data-dependent</em> test quantities <span class="math inline">T(\boldsymbol{\theta},\mathbf{y})</span> so discrepancies accumulate instead of cancelling.</p>
@@ -690,12 +723,17 @@ p_{\text{SBC}}(\mathbf{y},\boldsymbol{\theta},\tilde{\boldsymbol{\theta}})
 </section>
 <section id="model-misspecification" class="slide level2">
 <h2>Model Misspecification</h2>
-<p>Calibration assumes the model generated the data. Real simulators are imperfect:</p>
+<ul>
+<li>Calibration assumes the model generated the data. Real simulators are imperfect:</li>
+</ul>
 <p><span class="math display">
 \mathbf{y}_{\text{obs}} \nsim p(\mathbf{y}\mid\boldsymbol{\theta})\ \text{for any}\ \boldsymbol{\theta}
 </span></p>
 <div class="fragment">
-<p>This is a particular danger for amortized SBI. The network only ever saw the <strong>prior predictive</strong>, so if <span class="math inline">\mathbf{y}_{\text{obs}}</span> falls outside that region it extrapolates and returns a confident but wrong posterior <span class="citation" data-cites="frazier2024the schmitt2023detecting">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Frazier et al., 2024</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Schmitt et al., 2023</a>)</span>.</p>
+<ul>
+<li>The network only ever saw the <strong>prior predictive</strong>.</li>
+<li>If <span class="math inline">\mathbf{y}_{\text{obs}}</span> falls outside that region it extrapolates and returns a confident but wrong posterior <span class="citation" data-cites="frazier2024the schmitt2023detecting">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Frazier et al., 2024</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Schmitt et al., 2023</a>)</span>.</li>
+</ul>
 </div>
 <div class="fragment">
 <ul>
@@ -707,15 +745,23 @@ p_{\text{SBC}}(\mathbf{y},\boldsymbol{\theta},\tilde{\boldsymbol{\theta}})
 <section id="detecting-misspecification" class="slide level2">
 <h2>Detecting Misspecification</h2>
 <div class="fragment">
-<p><strong>Prior/posterior predictive check.</strong> Simulate replicated data <span class="math inline">\mathbf{y}^\ast</span> from the fitted posterior; compare a test statistic <span class="math inline">T</span> to <span class="math inline">T(\mathbf{y}_{\text{obs}})</span>: <span class="math display">
+<ul>
+<li><strong>Prior/posterior predictive check.</strong> Simulate replicated data <span class="math inline">\mathbf{y}^\ast</span> from the fitted posterior; compare a test statistic <span class="math inline">T</span> to <span class="math inline">T(\mathbf{y}_{\text{obs}})</span>: <span class="math display">
 p_{\text{ppc}} = \Pr\{T(\mathbf{y}^\ast)\ge T(\mathbf{y}_{\text{obs}})\mid\mathbf{y}_{\text{obs}}\}
-</span> Extreme tail probability ⇒ the model cannot reproduce the data.</p>
+</span></li>
+<li>Extreme tail probability ⇒ the model cannot reproduce the data.</li>
+</ul>
 </div>
 <div class="fragment">
-<p><strong>Summary-space distance.</strong> During training, learn the summary <span class="math inline">s(\mathbf{y})</span> under a distribution-matching penalty, for example MMD to <span class="math inline">\mathcal{N}(\mathbf{0},\mathbf{I})</span> <span class="citation" data-cites="schmitt2023detecting">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Schmitt et al., 2023</a>)</span>. At test time, an observation whose summary <span class="math inline">s(\mathbf{y}_{\text{obs}})</span> is an outlier in that space <strong>flags</strong> misspecification.</p>
+<ul>
+<li><strong>Summary-space distance.</strong> During training, learn the summary <span class="math inline">s(\mathbf{y})</span> under a distribution-matching penalty, for example MMD to <span class="math inline">\mathcal{N}(\mathbf{0},\mathbf{I})</span> <span class="citation" data-cites="schmitt2023detecting">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Schmitt et al., 2023</a>)</span>.</li>
+<li>At test time, an observation whose summary <span class="math inline">s(\mathbf{y}_{\text{obs}})</span> is an outlier in that space <strong>flags</strong> misspecification.</li>
+</ul>
 </div>
 <div class="fragment">
-<p>The two checks answer different questions, so run both: calibration on simulations, and predictive adequacy on the real observation.</p>
+<ul>
+<li>The two checks answer different questions, so do both: calibration on simulations, and predictive adequacy on the real observation.</li>
+</ul>
 </div>
 </section>
 <section id="exercise-2" class="slide level2" data-background-color="#fcba00">
@@ -776,13 +822,17 @@ p_{\text{ppc}} = \Pr\{T(\mathbf{y}^\ast)\ge T(\mathbf{y}_{\text{obs}})\mid\mathb
 </tbody>
 </table>
 <div class="fragment">
-<p>Dropping invertibility frees the architecture. What we gain is expressivity and, more importantly for the rest of this part, the ability to <strong>steer sampling after training</strong>. What we pay is sampling speed and, for consistency models, the density.</p>
+<ul>
+<li>Dropping invertibility frees the architecture.</li>
+<li>What we gain is expressivity and the ability to <strong>steer sampling after training</strong>.</li>
+<li>We pay with lower sampling speed and, for consistency models, the density.</li>
+</ul>
 </div>
 </section>
 <section id="benchmarking-diffusion-models" class="slide level2">
 <h2>Benchmarking Diffusion Models</h2>
 
-<img data-src="media/images/c2st_benchmark_boxplot_best.png" alt="Diffusion model benchmark" class="r-stretch"><p>C2ST across ten benchmark tasks, so lower is better and <span class="math inline">0.5</span> means indistinguishable from the reference posterior. The dashed line is the normalizing flow baseline of Lueckmann et al. <span class="citation" data-cites="arruda2025diffusion">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Arruda et al., 2025</a>)</span></p>
+<img data-src="media/images/c2st_benchmark_boxplot_best.png" alt="Diffusion model benchmark" class="r-stretch"><p>C2ST across ten benchmark tasks, so lower is better and <span class="math inline">0.5</span> means indistinguishable from the reference posterior. The dashed line is the normalizing flow baseline of Lueckmann et al. <span class="citation" data-cites="arruda2025diffusion">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Arruda et al., 2025</a>)</span>.</p>
 </section>
 <section id="diffusion-models" class="slide level2">
 <h2>Diffusion Models</h2>
@@ -810,35 +860,47 @@ p(\mathbf{z}_t\mid\mathbf{z}_0)=\mathcal{N}(\alpha_t\mathbf{z}_0,\sigma_t^2\math
 </section>
 <section id="diffusion-the-reverse-process" class="slide level2">
 <h2>Diffusion: The Reverse Process</h2>
-<p>The forward SDE has a <strong>time-reversal</strong> <span class="citation" data-cites="anderson1982reverse-time">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Anderson, 1982</a>)</span>: <span class="math display">
+<ul>
+<li>The forward SDE has a <strong>time-reversal</strong> <span class="citation" data-cites="anderson1982reverse-time">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Anderson, 1982</a>)</span>: <span class="math display">
 \mathrm{d}\mathbf{z}_t = \big[f(t)\mathbf{z}_t - g(t)^2\, \nabla_{\mathbf{z}_t}\!\log p_t(\mathbf{z}_t)\big]\,\mathrm{d}t + g(t)\,\mathrm{d}\bar{\mathbf{W}}_t
-</span></p>
+</span></li>
+</ul>
 <div class="fragment">
-<p>The only unknown is the <strong>score</strong> <span class="math inline">\nabla_{\mathbf{z}_t}\log p_t(\mathbf{z}_t)</span>. Learn it, and we can integrate backwards from noise to a sample.</p>
+<ul>
+<li>The only unknown is the <strong>score</strong> <span class="math inline">\nabla_{\mathbf{z}_t}\log p_t(\mathbf{z}_t)</span>.</li>
+<li>If known, we can integrate backwards from noise to a sample.</li>
+</ul>
 </div>
 </section>
 <section id="denoising-score-matching" class="slide level2">
 <h2>Denoising Score Matching</h2>
-<p>Regress a network <span class="math inline">\hat{s}</span> onto the score of the (Gaussian) noising kernel: <span class="math display">
+<ul>
+<li><p>Regress a network <span class="math inline">\hat{s}</span> onto the score of the (Gaussian) noising kernel: <span class="math display">
 \hat{s} = \arg\min_{s}\;
 \mathbb{E}_{\mathbf{z}_0,\mathbf{y},\boldsymbol{\epsilon},t}\Big[\omega_t\,\big\Vert s(\mathbf{z}_t,\mathbf{y},t) - \nabla_{\mathbf{z}_t}\log p(\mathbf{z}_t\mid\mathbf{z}_0)\big\Vert_2^2\Big]
-</span></p>
-<p>This has the <strong>same minimizer</strong> as regression on the marginal <span class="math inline">\nabla_{\mathbf{z}_t}\log p(\mathbf{z}_t)</span> <span class="citation" data-cites="vincent2011connection song2021score-based">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Song et al., 2021</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Vincent, 2011</a>)</span>. The neural network can be <strong>any architecture</strong> which predicts a score, e.g., a MLP <span class="citation" data-cites="sharrock2024sequential">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Sharrock et al., 2024</a>)</span> or a transformer <span class="citation" data-cites="gloeckler2024all-in-one">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Gloeckler et al., 2024</a>)</span>.</p>
+</span></p></li>
+<li><p>This has the <strong>same minimizer</strong> as regression on the marginal <span class="math inline">\nabla_{\mathbf{z}_t}\log p(\mathbf{z}_t)</span> <span class="citation" data-cites="vincent2011connection song2021score-based">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Song et al., 2021</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Vincent, 2011</a>)</span>.</p></li>
+<li><p>The neural network can be <strong>any architecture</strong> which predicts a score, e.g., a MLP <span class="citation" data-cites="sharrock2024sequential">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Sharrock et al., 2024</a>)</span> or a transformer <span class="citation" data-cites="gloeckler2024all-in-one">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Gloeckler et al., 2024</a>)</span>.</p></li>
+</ul>
 <div class="fragment">
-<p>Because <span class="math inline">\mathbf{z}_t = \alpha_t\mathbf{z}_0 + \sigma_t\boldsymbol{\epsilon}</span> is Gaussian, the conditional target is <strong>known in closed form</strong>: <span class="math display">
+<ul>
+<li><p>Because <span class="math inline">\mathbf{z}_t = \alpha_t\mathbf{z}_0 + \sigma_t\boldsymbol{\epsilon}</span> is Gaussian, the conditional target is <strong>known in closed form</strong>: <span class="math display">
 \nabla_{\mathbf{z}_t}\log p(\mathbf{z}_t\mid\mathbf{z}_0) = -\boldsymbol{\epsilon}/\sigma_t
-</span></p>
-<p>Training therefore reduces to <strong>noise prediction</strong>: draw <span class="math inline">(\mathbf{z}_0,\mathbf{y})</span> from simulations, <span class="math inline">t\sim\mathcal{U}[0,1]</span>, and <span class="math inline">\boldsymbol{\epsilon}\sim\mathcal{N}(\mathbf{0},\mathbf{I})</span>.</p>
+</span></p></li>
+<li><p>Training reduces to <strong>noise prediction</strong>: draw <span class="math inline">(\mathbf{z}_0,\mathbf{y})</span> from simulations, <span class="math inline">t\sim\mathcal{U}[0,1]</span>, and <span class="math inline">\boldsymbol{\epsilon}\sim\mathcal{N}(\mathbf{0},\mathbf{I})</span>.</p></li>
+</ul>
 </div>
 <div class="fragment">
-<p>Predicting <span class="math inline">\mathbf{z}_0</span>, <span class="math inline">\boldsymbol{\epsilon}</span>, the velocity, or the score are equivalent parameterizations of the same object. Which one you regress on is a <strong>design choice</strong>.</p>
+<ul>
+<li>Predicting <span class="math inline">\mathbf{z}_0</span>, <span class="math inline">\boldsymbol{\epsilon}</span>, the velocity, or the score are equivalent parameterizations (<strong>design choice</strong>) of the same object.</li>
+</ul>
 </div>
 </section>
 <section id="what-the-learned-score-looks-like" class="slide level2">
 <h2>What the Learned Score Looks Like</h2>
 <video src="media/videos/manim_diffusion/1080p60/ScoreField.mp4" data-autoplay="" autoplay="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
 </video>
-<p>The <em>trained</em> model’s score <span class="math inline">s(\mathbf{z},t)\approx\nabla_{\mathbf{z}}\log p_t(\mathbf{z})</span> points toward the data cells and vanishes inside them.</p>
+<p>The <em>trained</em> model’s score <span class="math inline">s(\mathbf{z},t)\approx\nabla_{\mathbf{z}}\log p_t(\mathbf{z})</span> points toward the data.</p>
 </section>
 <section id="reverse-process-stochastic-sde" class="slide level2">
 <h2>Reverse Process: Stochastic SDE</h2>
@@ -846,24 +908,26 @@ p(\mathbf{z}_t\mid\mathbf{z}_0)=\mathcal{N}(\alpha_t\mathbf{z}_0,\sigma_t^2\math
 </video>
 <p>The <strong>reverse SDE</strong> injects noise at every step.</p>
 </section>
-<section id="reverse-sde-close-up-on-the-final-steps" class="slide level2">
-<h2>Reverse SDE: Close-Up on the Final Steps</h2>
+<section id="reverse-process-stochastic-sde-close-up" class="slide level2">
+<h2>Reverse Process: Stochastic SDE Close-Up</h2>
 <video src="media/videos/manim_diffusion/1080p60/ReverseSDEWindow.mp4" data-autoplay="" autoplay="" loop="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
 </video>
 <p>The same trajectory, zoomed into the last time steps.</p>
 </section>
 <section id="from-sde-to-ode-flow-matching" class="slide level2">
 <h2>From SDE to ODE: Flow Matching</h2>
-<p>The reverse SDE has a deterministic twin, the <strong>probability-flow ODE</strong> with the <em>same</em> marginals: <span class="math display">
-\mathrm{d}\mathbf{z}_t = \Big[f(t)\mathbf{z}_t - \tfrac{1}{2}g(t)^2\, s(\mathbf{z}_t,\mathbf{y},t)\Big]\mathrm{d}t = v(\mathbf{z}_t,\mathbf{y},t)\,\mathrm{d}t
-</span></p>
-<div class="fragment">
-<p><strong>Flow matching</strong> <span class="citation" data-cites="lipman2023flow wildberger2023flow">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Lipman et al., 2023</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Wildberger et al., 2023</a>)</span> skips the score and regresses the <strong>velocity field</strong> <span class="math inline">v</span> directly, along a chosen interpolation between noise and data: <span class="math display">
-\hat{v} = \arg\min_v\; \mathbb{E}_{t,\mathbf{z}_0,\boldsymbol{\epsilon}}\big[\Vert v(\mathbf{z}_t,\mathbf{y},t) - (\dot\alpha_t\mathbf{z}_0 + \dot\sigma_t\boldsymbol{\epsilon})\Vert_2^2\big]
-</span></p>
 <ul>
-<li>Straighter paths, so usually fewer integration steps.</li>
-<li><strong>Density evaluation</strong> is available by integrating the Jacobian trace along the ODE, but it is expensive.</li>
+<li>The reverse SDE has a deterministic twin, the <strong>probability-flow ODE</strong> with the <em>same</em> marginals: <span class="math display">
+\mathrm{d}\mathbf{z}_t = \Big[f(t)\mathbf{z}_t - \tfrac{1}{2}g(t)^2\, s(\mathbf{z}_t,\mathbf{y},t)\Big]\mathrm{d}t = v(\mathbf{z}_t,\mathbf{y},t)\,\mathrm{d}t
+</span></li>
+</ul>
+<div class="fragment">
+<ul>
+<li><p><strong>Flow matching</strong> <span class="citation" data-cites="lipman2023flow wildberger2023flow">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Lipman et al., 2023</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Wildberger et al., 2023</a>)</span> skips the score and regresses the <strong>velocity field</strong> <span class="math inline">v</span> directly, along a chosen interpolation between noise and data: <span class="math display">
+\hat{v} = \arg\min_v\; \mathbb{E}_{t,\mathbf{z}_0,\boldsymbol{\epsilon}}\big[\Vert v(\mathbf{z}_t,\mathbf{y},t) - (\dot\alpha_t\mathbf{z}_0 + \dot\sigma_t\boldsymbol{\epsilon})\Vert_2^2\big]
+</span></p></li>
+<li><p>Straighter paths, so usually fewer integration steps.</p></li>
+<li><p><strong>Density evaluation</strong> is available by integrating the Jacobian trace along the ODE, but it is expensive.</p></li>
 </ul>
 </div>
 </section>
@@ -871,7 +935,7 @@ p(\mathbf{z}_t\mid\mathbf{z}_0)=\mathcal{N}(\alpha_t\mathbf{z}_0,\sigma_t^2\math
 <h2>Reverse Process: Deterministic ODE</h2>
 <video src="media/videos/manim_diffusion/1080p60/ReverseODE.mp4" data-autoplay="" autoplay="" loop="" muted="" playsinline="" style="max-height:560px;display:block;margin:0 auto;">
 </video>
-<p>The <strong>probability-flow ODE</strong> has the <em>same marginals</em> as the SDE, but each sample now follows a single deterministic path.</p>
+<p>The <strong>probability-flow ODE</strong> has the <em>same marginals</em> as the SDE, but a deterministic path.</p>
 </section>
 <section id="consistency-models" class="slide level2">
 <h2>Consistency Models</h2>
@@ -883,9 +947,11 @@ c(\mathbf{z}_t,\mathbf{y},t) = c(\mathbf{z}_{t'},\mathbf{y},t'),\qquad c(\mathbf
 </span></li>
 </ul>
 <div class="fragment">
-<p>Parameterize <span class="math inline">c(\mathbf{z}_t,\mathbf{y},t) = c_{\text{skip}}(t)\,\mathbf{z}_t + c_{\text{out}}(t)\,F(\mathbf{z}_t,\mathbf{y},t)</span> with <span class="math inline">c_{\text{skip}}(0)=1,\ c_{\text{out}}(0)=0</span>, and train outputs to <strong>agree at nearby times</strong>: <span class="math display">
+<ul>
+<li>Parameterize <span class="math inline">c(\mathbf{z}_t,\mathbf{y},t) = c_{\text{skip}}(t)\,\mathbf{z}_t + c_{\text{out}}(t)\,F(\mathbf{z}_t,\mathbf{y},t)</span> with <span class="math inline">c_{\text{skip}}(0)=1,\ c_{\text{out}}(0)=0</span>, and train outputs to <strong>agree at nearby times</strong>: <span class="math display">
 \min_c\ \mathbb{E}\big[\omega_t\, d\big(c(\mathbf{z}_t,\mathbf{y},t),\ \bar c(\mathbf{z}_{t-\Delta t},\mathbf{y},t-\Delta t)\big)\big]
-</span> → <strong>one- or few-step</strong> sampling: jump to the endpoint, re-noise to a lower level, and refine.</p>
+</span> → <strong>one- or few-step</strong> sampling: jump to the endpoint, re-noise to a lower level, and refine.</li>
+</ul>
 </div>
 </section>
 <section id="consistency-sampling-few-discrete-steps" class="slide level2">
@@ -901,22 +967,22 @@ c(\mathbf{z}_t,\mathbf{y},t) = c(\mathbf{z}_{t'},\mathbf{y},t'),\qquad c(\mathbf
 </section>
 <section id="post-hoc-guidance" class="slide level2">
 <h2>Post-Hoc Guidance</h2>
-<p>This is what the free-form architecture bought us. The score is <strong>additive</strong>, so sampling can be steered after training by adding a gradient term.</p>
+<p>The score is <strong>additive</strong>, so sampling can be steered after training by adding a gradient term.</p>
 
 <img data-src="media/images/adaptive_inference.png" alt="Post-hoc guidance" class="r-stretch"><p><span class="math display">
 \nabla_{\boldsymbol{\theta}_t}\log p(\boldsymbol{\theta}_t\mid\text{extra}) \approx \hat{s}(\boldsymbol{\theta}_t,\mathbf{y},t) + \nabla_{\boldsymbol{\theta}_t}\log g(\boldsymbol{\theta}_t)
 </span></p>
-<p>Impose constraints, change the prior, or compose models without retraining <span class="citation" data-cites="bansal2023universal yang2026priorguide">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Bansal et al., 2023</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Yang et al., 2026</a>)</span>.</p>
+<p>→ Impose constraints, change the prior, or compose models without retraining <span class="citation" data-cites="bansal2023universal yang2026priorguide">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Bansal et al., 2023</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Yang et al., 2026</a>)</span>.</p>
 </section>
 <section id="careful-guidance-changes-the-target" class="slide level2">
 <h2>Careful: Guidance Changes the Target</h2>
-<p>Guidance modifies the reverse-time marginals, so the density you sample from is generally <strong>not</strong> the one you intended <span class="citation" data-cites="chidambaram2024what">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Chidambaram et al., 2024</a>)</span>.</p>
 <ul>
+<li>Guidance modifies the reverse-time marginals, so the density you sample from is generally <strong>not</strong> the one you intended <span class="citation" data-cites="chidambaram2024what">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Chidambaram et al., 2024</a>)</span>.</li>
 <li>Samples can be <strong>biased</strong>, and how badly depends on the type of guidance.</li>
 <li>Correction samplers (Langevin, MCMC, or weighting) can recover the target <span class="citation" data-cites="geffner2023compositional skreta2025feynman">(<a href="#/additional-resources" role="doc-biblioref" onclick="">Geffner et al., 2023</a>; <a href="#/additional-resources" role="doc-biblioref" onclick="">Skreta et al., 2025</a>)</span>.</li>
 </ul>
 <div class="fragment">
-<p>So re-check calibration <em>after</em> guidance, with the tools from Part 2.</p>
+<p>→ So re-check calibration <em>after</em> guidance, with the tools from Part 2.</p>
 </div>
 </section>
 <section id="revisiting-hierarchical-models" class="slide level2">
@@ -970,9 +1036,9 @@ p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
 <ol type="1">
 <li><strong>SBI</strong> needs nothing but a simulator you can sample.</li>
 <li><strong>Amortization</strong> trades a one-time training cost for instant inference on any dataset.</li>
-<li>A <strong>summary network</strong> encodes the structure of the data (set, time series, hierarchy).</li>
-<li><strong>Validate two things separately:</strong> SBC for calibration, predictive checks for misspecification.</li>
-<li><strong>Diffusion, flow matching, and consistency models</strong> drop invertibility, which is what makes them <strong>steerable after training</strong>.</li>
+<li><strong>Summary networks</strong> encode the structure of the data (set, time series, hierarchy).</li>
+<li><strong>Diagnostics</strong> such as SBC for calibration or predictive checks for misspecification.</li>
+<li><strong>Diffusion models</strong> drop invertibility, which is what makes them <strong>steerable after training</strong>.</li>
 </ol>
 <div class="fragment">
 <p><strong>Some open questions I am thinking about currently:</strong></p>
@@ -983,7 +1049,7 @@ p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
 </ul>
 </div>
 <div class="fragment">
-<p><strong>Whatever you build: check it with simulation-based calibration.</strong></p>
+<p><strong>Whatever you build: check it with simulation-based calibration!</strong></p>
 </div>
 </section>
 <section id="additional-resources" class="slide level2 smaller scrollable">
@@ -997,8 +1063,8 @@ p(\boldsymbol{\theta}\mid\mathbf{y}^{(r)},\boldsymbol{\eta})
 <p><img data-src="media/images/qrcode.png" alt="QR code for tutorial review paper"></p>
 </div></div>
 <p><strong>Tutorial review paper</strong>: 50+ SBI &amp; diffusion models papers, benchmarks, and discussion of design choices.</p>
-<p><strong><a href="https://github.com/arrjon/BayesFlowTutorial" target="_blank" data-preview-link="false">▶ Tutorial with Solutions: https://github.com/arrjon/BayesFlowTutorial</a></strong></p>
-<p>jonas.arruda@uni-bonn.de</p>
+<p><strong><a href="https://github.com/arrjon/BayesFlowTutorial" target="_blank" data-preview-link="false">▶ Slides &amp; Tutorial with Solutions: https://github.com/arrjon/BayesFlowTutorial</a></strong></p>
+<p><strong>Reach out</strong>: jonas.arruda@uni-bonn.de</p>
 </div>
 <div class="logo-row">
 <p><img data-src="media/images/UNI_Bonn_Logo_Standard_.jpg" alt="University of Bonn logo"> <img data-src="media/images/BIGS-Logo.png" alt="BIGS logo"> <img data-src="media/images/bcml.webp" alt="BCML logo"></p>
@@ -1117,7 +1183,7 @@ Zaheer, Kottur, Ravanbhakhsh, Póczos, Salakhutdinov, and Smola (2017). <a href=
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="material/UNI_Bonn_Logo_Standard_.jpg" class="slide-logo"></p>
 <div class="footer footer-default">
-
+<p>Jonas Arruda · University of Bonn · ProbAI School 2026</p>
 </div>
 </div></div>
 
