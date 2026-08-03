@@ -11,7 +11,7 @@ All notebooks are designed to run on  **Google Colab**.
 > *simulator → adapter → networks → workflow → diagnostics* fits together, and how to push it
 > further with diagnostics and diffusion-model guidance.
 
-> These exercises are built on and adapted from the official BayesFlow
+> These exercises are built on and adapted from the BayesFlow
 > tutorials and example notebooks. For the original tutorials, full documentation, and the
 > example gallery, see the BayesFlow website: <https://bayesflow.org>.
 
